@@ -1,5 +1,4 @@
-# VD_Toggler_2.0
-## 项目简介
+# <img src="https://github.com/DaHedan/VD_Toggler/blob/main/img/els/VDT.png" alt="VD_Toggler" style="width:6%">  VD_Toggler_2.0 
 此项目通过UI的方式调用包括Windows 7、Windows10、Windows 11系统上的虚拟桌面，便于在没有键盘的多媒体设备上使用虚拟桌面。
 
 data/data.csv用于储存主程序的配置信息，data/vdtcfg.csv用于储存配置工具的窗口大小和字体大小。img文件夹用于存放代码调用的图片文件。
