@@ -29,4 +29,5 @@ data/data.csv用于储存主程序的配置信息，data/vdtcfg.csv用于储存�
    (4) “__隐藏移速__”，用于设置 __隐藏__ 时按钮移动到屏幕边缘的动画速度。_(数值为默认值的倍数)_
 3. 点击中央窗口底部的“__确定__”按钮，可保留更改。
 4. 点击中央窗口底部的“__取消__”按钮，可放弃更改。
-5. 点击中央窗口底部的“__复原__”按钮，可恢复默认的配置数据。
+5. 点击中央窗口底部的“__复原__”按钮，可恢复默认的配置数据。 
+<video src="https://github.com/DaHedan/VD_Toggler/raw/main/Windows10上的演示视频.mp4" width="100%" controls autoplay loop muted></video>
