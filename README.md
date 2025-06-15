@@ -1,5 +1,5 @@
 # <img src="https://github.com/DaHedan/VD_Toggler/blob/main/img/els/VDT.png" alt="VD_Toggler" style="width:6%">  VD_Toggler_2.0 
-此项目通过UI的方式调用包括Windows 7、Windows10、Windows 11系统上的虚拟桌面，便于在没有键盘的多媒体设备上使用虚拟桌面。
+此项目通过UI的方式调用包括Windows 7/Windows10/Windows 11系统上的虚拟桌面，便于在没有键盘的多媒体设备上使用虚拟桌面。
 
 data/data.csv用于储存主程序的配置信息，data/vdtcfg.csv用于储存配置工具的窗口大小和字体大小。img文件夹用于存放代码调用的图片文件。
 
@@ -30,3 +30,5 @@ data/data.csv用于储存主程序的配置信息，data/vdtcfg.csv用于储存�
 3. 点击中央窗口底部的“__确定__”按钮，可保留更改。
 4. 点击中央窗口底部的“__取消__”按钮，可放弃更改。
 5. 点击中央窗口底部的“__复原__”按钮，可恢复默认的配置数据。
+## 下载安装包
+[VD_Toggler_2.0_x64_Setup.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v2.0.0/VD_Toggler_2.0_x64_Setup.exe)
