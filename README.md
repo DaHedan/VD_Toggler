@@ -1,5 +1,5 @@
 # <img src="https://github.com/DaHedan/VD_Toggler/blob/main/img/els/VDT.png" alt="VD_Toggler" style="width:6%">  VD_Toggler_2.0 ![GitHub 版本](https://img.shields.io/github/v/release/DaHedan/VD_Toggler) ![许可证](https://img.shields.io/github/license/DaHedan/VD_Toggler) ![总下载量](https://img.shields.io/github/downloads/DaHedan/VD_Toggler/total) ![支持系统](https://img.shields.io/badge/Win7/10/11_x64-✓-green??logo=windows) ![最后提交](https://img.shields.io/github/last-commit/DaHedan/VD_Toggler)
-_专为触摸屏优化的虚拟桌面管理工具_ - 无需键盘即可轻松使用 Windows 虚拟桌面（支持 Win7/10/11）
+_专为触屏优化的虚拟桌面工具_ - 无需键盘即可轻松使用 Windows 虚拟桌面（支持 Win7/10/11）
 ## 🗂️ 文件说明
 data/data.csv用于储存主程序的配置信息，data/vdtcfg.csv用于储存配置工具的窗口大小和字体大小。  
 img文件夹用于存放代码调用的图片文件。  
