@@ -391,7 +391,7 @@ class VirtualDesktopToggler:
         try:
             process = subprocess.Popen("VDT_cfg.exe")
         except:
-            process = subprocess.Popen(["python", "VDT_cfg2.1.1.py"])
+            process = subprocess.Popen(["python", "VDT_cfg_2.1.1.py"])
 
         def check_process():
             if process.poll() is None:
@@ -485,3 +485,4 @@ class VirtualDesktopToggler:
 if __name__ == '__main__':
     app = VirtualDesktopToggler()
     app.root.mainloop()
+
