@@ -38,7 +38,8 @@ VDT_cfg_2.1.1.py为配置工具
 3. 若需二次分发或商用，需提前联系作者获得授权。  
 ## 📦 下载工具 ![Windows x64](https://img.shields.io/badge/下载-Windows_x64-blue?logo=windows)
 __VD_Toggler v2.1.1:__  
-压缩包：[VD_Toggler_2.1.1-rc_x64.zip](https://github.com/DaHedan/VD_Toggler/releases/download/v2.1.1-rc/VD_Toggler_2.1.1-rc_x64.zip)
+压缩包：[VD_Toggler_2.1.1-rc_x64.zip](https://github.com/DaHedan/VD_Toggler/releases/download/v2.1.1-rc/VD_Toggler_2.1.1-rc_x64.zip)  
+安装包：[VD_Toggler_2.1.1-rc_x64_set_up.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v2.1.1-rc/VD_Toggler_2.1.1-rc_x64_set_up.exe)
 
 __其他版本：__  
 [VD_Toggler v2.0.0](https://github.com/DaHedan/VD_Toggler/releases/tag/v2.0.0)
