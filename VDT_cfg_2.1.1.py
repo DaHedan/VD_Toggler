@@ -119,14 +119,14 @@ class ConfigTool:
         # 窗口大小
         screen_width = self.root.winfo_screenwidth()
         screen_height = self.root.winfo_screenheight()
-        window_width = self.count_x(920)
-        window_height = self.count_y(660)
+        window_width = 920
+        window_height = 660
         self.root.geometry(f"{window_width}x{window_height}")
         self.root.resizable(True, True)
 
         # 计算基础字体大小
-        self.base_font_size = self.count_y(16) * -1
-        self.title_font_size = self.count_y(18) * -1
+        self.base_font_size = -16
+        self.title_font_size = -18
 
         # 创建字体对象
         font_family = ["Microsoft YaHei", "sans-serif"]
@@ -140,7 +140,7 @@ class ConfigTool:
         self.root.geometry(f"+{x}+{y}")
         self.setup_ui()
 
-    def get_system_scaling(self):
+    '''def get_system_scaling(self):
         """通过注册表获取系统缩放比例"""
         shcore = ctypes.windll.shcore
         monitor = ctypes.windll.user32.MonitorFromWindow(ctypes.windll.user32.GetDesktopWindow(), 2)
@@ -154,7 +154,7 @@ class ConfigTool:
 
     def count_y(self, value):
         screen_height = self.root.winfo_screenheight()
-        return int(value / 1080 * screen_height / self.get_system_scaling() * 1.25)
+        return int(value / 1080 * screen_height / self.get_system_scaling() * 1.25)'''
 
     def setup_ui(self):
         """设置窗口内容"""
@@ -162,7 +162,7 @@ class ConfigTool:
         
         # 主容器
         main_frame = tk.Frame(self.root, bg='white')
-        main_frame.pack(fill="both", expand=True, padx=self.count_x(20), pady=self.count_y(10))
+        main_frame.pack(fill="both", expand=True, padx=20, pady=10)
 
         # 配置网格权重
         main_frame.grid_rowconfigure(0, weight=0)  # 提示文本
@@ -178,15 +178,15 @@ class ConfigTool:
         # 提示文本
         label = tk.Label(main_frame, 
                         text="你可以通过拖动按钮来自定义布局。\n若想保留更改，请点击“确定”；若想放弃更改，请点击“取消”。",
-                        wraplength=self.count_x(0.16), 
+                        wraplength=0.16, 
                         font=self.default_font,
                         justify="left", 
                         bg='white')
-        label.grid(row=0, column=0, columnspan=3, sticky="w", pady=(0, self.count_y(7)))
+        label.grid(row=0, column=0, columnspan=3, sticky="w", pady=(0, 7))
 
         """模式选择"""
-        mode_frame = tk.LabelFrame(main_frame, text=" 模式选择 ", font=self.title_font, bg='white', padx=self.count_x(10), pady=self.count_y(5))
-        mode_frame.grid(row=1, column=0, sticky="ew", padx=self.count_x(5), pady=self.count_y(5))
+        mode_frame = tk.LabelFrame(main_frame, text=" 模式选择 ", font=self.title_font, bg='white', padx=10, pady=5)
+        mode_frame.grid(row=1, column=0, sticky="ew", padx=5, pady=5)
 
         with open(r'data\data.csv', 'r') as f:
             first_line = f.readline().strip()
@@ -194,16 +194,16 @@ class ConfigTool:
 
         self.switch_var = tk.IntVar(value=current_mode)
         
-        tk.Label(mode_frame, text="按钮位置:", font=self.issue_font, bg='white').pack(side="left", padx=(0, self.count_x(10)))
+        tk.Label(mode_frame, text="按钮位置:", font=self.issue_font, bg='white').pack(side="left", padx=(0, 10))
         
         tk.Radiobutton(mode_frame, text="左侧", font=self.default_font, variable=self.switch_var, 
                       value=2, command=self.update_switch, bg='white').pack(side="left")
         tk.Radiobutton(mode_frame, text="右侧", font=self.default_font, variable=self.switch_var, 
-                      value=1, command=self.update_switch, bg='white').pack(side="left", padx=(0, self.count_x(10)))
+                      value=1, command=self.update_switch, bg='white').pack(side="left", padx=(0, 10))
 
         """瞬匿模式"""
-        hide_frame = tk.LabelFrame(main_frame, text=" 瞬匿模式 ", font=self.title_font, bg='white', padx=self.count_x(10), pady=self.count_y(5))
-        hide_frame.grid(row=2, column=0, sticky="ew", padx=self.count_x(5), pady=self.count_y(5))
+        hide_frame = tk.LabelFrame(main_frame, text=" 瞬匿模式 ", font=self.title_font, bg='white', padx=10, pady=5)
+        hide_frame.grid(row=2, column=0, sticky="ew", padx=5, pady=5)
 
         with open(r'data\data.csv', 'r') as f:
             lines = f.readlines()
@@ -211,10 +211,10 @@ class ConfigTool:
 
         self.hide_var = tk.IntVar(value=current_hide)
 
-        tk.Label(hide_frame, text="按钮在切换桌面后立即消失？", font=self.issue_font, bg='white').pack(side="left", padx=(0, self.count_x(10)))
+        tk.Label(hide_frame, text="按钮在切换桌面后立即消失？", font=self.issue_font, bg='white').pack(side="left", padx=(0, 10))
 
         tk.Radiobutton(hide_frame, text="是", font=self.default_font, variable=self.hide_var, 
-                      value=1, command=self.update_hide, bg='white').pack(side="left", padx=(0, self.count_x(10)))
+                      value=1, command=self.update_hide, bg='white').pack(side="left", padx=(0, 10))
         tk.Radiobutton(hide_frame, text="否", font=self.default_font, variable=self.hide_var, 
                       value=0, command=self.update_hide, bg='white').pack(side="left")
 
@@ -224,16 +224,16 @@ class ConfigTool:
 
         self.hide_mode_var = tk.IntVar(value=current_hide_mode)
 
-        tk.Label(hide_frame, text="按钮消失方式:", font=self.issue_font, bg='white').pack(side="left", padx=(self.count_x(120), self.count_x(10)))
+        tk.Label(hide_frame, text="按钮消失方式:", font=self.issue_font, bg='white').pack(side="left", padx=(120, 10))
 
         tk.Radiobutton(hide_frame, text="隐藏", font=self.default_font, variable=self.hide_mode_var, 
-                      value=1, command=self.update_hide_mode, bg='white').pack(side="left", padx=(0, self.count_x(10)))
+                      value=1, command=self.update_hide_mode, bg='white').pack(side="left", padx=(0, 10))
         tk.Radiobutton(hide_frame, text="退出", font=self.default_font, variable=self.hide_mode_var, 
                       value=2, command=self.update_hide_mode, bg='white').pack(side="left")
 
         """自动静音模式"""
-        audio_frame = tk.LabelFrame(main_frame, text=" 自动静音 ", font=self.title_font, bg='white', padx=self.count_x(10), pady=self.count_y(5))
-        audio_frame.grid(row=3, column=0, sticky="ew", padx=self.count_x(5), pady=self.count_y(5))
+        audio_frame = tk.LabelFrame(main_frame, text=" 自动静音 ", font=self.title_font, bg='white', padx=10, pady=5)
+        audio_frame.grid(row=3, column=0, sticky="ew", padx=5, pady=5)
 
         with open(r'data\data.csv', 'r') as f:
             lines = f.readlines()
@@ -241,16 +241,16 @@ class ConfigTool:
 
         self.close_audio_var = tk.IntVar(value=current_audio_mode)
 
-        tk.Label(audio_frame, text="在切换桌面时静音？", font=self.issue_font, bg='white').pack(side="left", padx=(0, self.count_x(10)))
+        tk.Label(audio_frame, text="在切换桌面时静音？", font=self.issue_font, bg='white').pack(side="left", padx=(0, 10))
 
         tk.Radiobutton(audio_frame, text="是", font=self.default_font, variable=self.close_audio_var, 
-                      value=1, command=self.update_close_audio, bg='white').pack(side="left", padx=(0, self.count_x(10)))
+                      value=1, command=self.update_close_audio, bg='white').pack(side="left", padx=(0, 10))
         tk.Radiobutton(audio_frame, text="否", font=self.default_font, variable=self.close_audio_var, 
                       value=0, command=self.update_close_audio, bg='white').pack(side="left")
 
         """按钮大小设置"""
-        size_frame = tk.LabelFrame(main_frame, text=" 按钮大小 ", font=self.title_font, bg='white', padx=self.count_x(10), pady=self.count_y(10))
-        size_frame.grid(row=4, column=0, sticky="ew", padx=self.count_x(5), pady=self.count_y(5))
+        size_frame = tk.LabelFrame(main_frame, text=" 按钮大小 ", font=self.title_font, bg='white', padx=10, pady=10)
+        size_frame.grid(row=4, column=0, sticky="ew", padx=5, pady=5)
 
         with open(r'data\data.csv', 'r') as f:
             lines = f.readlines()
@@ -258,20 +258,20 @@ class ConfigTool:
 
         self.size_var = tk.DoubleVar(value=current_size)
 
-        tk.Label(size_frame, text="按钮大小的缩放倍数:", font=self.issue_font, bg='white').pack(side="left", padx=(0, self.count_x(40)))
+        tk.Label(size_frame, text="按钮大小的缩放倍数:", font=self.issue_font, bg='white').pack(side="left", padx=(0, 40))
 
         size_slider = tk.Scale(size_frame, from_=0.1, to=3.0, resolution=0.1, font=self.default_font,
                               orient=tk.HORIZONTAL, variable=self.size_var,
                               command=self.update_size_setting, 
-                              length=self.count_x(480), showvalue=0, bg='white')
+                              length=480, showvalue=0, bg='white')
         size_slider.pack(side="left")
 
         self.size_value_label = tk.Label(size_frame, text=f"{current_size:.1f}", font=self.default_font, bg='white')
-        self.size_value_label.pack(side="left", padx=(self.count_x(10), 0))
+        self.size_value_label.pack(side="left", padx=(10, 0))
 
         """隐藏移速设置"""
-        speed_frame = tk.LabelFrame(main_frame, text=" 隐藏移速 ", font=self.title_font, bg='white', padx=self.count_x(10), pady=self.count_y(10))
-        speed_frame.grid(row=5, column=0, sticky="ew", padx=self.count_x(5), pady=self.count_y(5))
+        speed_frame = tk.LabelFrame(main_frame, text=" 隐藏移速 ", font=self.title_font, bg='white', padx=10, pady=10)
+        speed_frame.grid(row=5, column=0, sticky="ew", padx=5, pady=5)
 
         with open(r'data\data.csv', 'r') as f:
             lines = f.readlines()
@@ -283,57 +283,57 @@ class ConfigTool:
 
         self.speed_var = tk.DoubleVar(value=current_speed)
 
-        tk.Label(speed_frame, text="隐藏时按钮移速的倍数:", font=self.issue_font, bg='white').pack(side="left", padx=(0, self.count_x(24)))
+        tk.Label(speed_frame, text="隐藏时按钮移速的倍数:", font=self.issue_font, bg='white').pack(side="left", padx=(0, 24))
 
         speed_slider = tk.Scale(speed_frame, from_=0.2, to=3.0, resolution=0.2, font=self.default_font,
                                orient=tk.HORIZONTAL, variable=self.speed_var,
                                command=self.update_speed_setting,
-                               length=self.count_x(480), showvalue=0, bg='white')
+                               length=480, showvalue=0, bg='white')
         speed_slider.pack(side="left")
 
         self.speed_value_label = tk.Label(speed_frame, text=f"{current_speed:.1f}", font=self.default_font, bg='white')
-        self.speed_value_label.pack(side="left", padx=(self.count_x(10), 0))
+        self.speed_value_label.pack(side="left", padx=(10, 0))
 
         """快捷键设置"""
-        shortcut_frame = tk.LabelFrame(main_frame, text=" 附加快捷键 ", font=self.title_font, bg='white', padx=self.count_x(10), pady=self.count_y(5))
-        shortcut_frame.grid(row=6, column=0, sticky="ew", padx=self.count_x(5), pady=self.count_y(5))
+        shortcut_frame = tk.LabelFrame(main_frame, text=" 附加快捷键 ", font=self.title_font, bg='white', padx=10, pady=5)
+        shortcut_frame.grid(row=6, column=0, sticky="ew", padx=5, pady=5)
 
         shortcut_ctrl_frame = tk.Frame(shortcut_frame, bg='white')
         shortcut_ctrl_frame.pack(fill="x", anchor="w")
 
-        tk.Label(shortcut_ctrl_frame, text="切换桌面时触发的快捷键:", font=self.issue_font, bg='white').pack(side="left", padx=(0, self.count_x(10)))
+        tk.Label(shortcut_ctrl_frame, text="切换桌面时触发的快捷键:", font=self.issue_font, bg='white').pack(side="left", padx=(0, 10))
 
-        clear_btn = tk.Button(shortcut_ctrl_frame, text="清空", font=self.default_font, width=self.count_x(5), command=self.clear_shortcut_combs, bg='white')
-        clear_btn.pack(side="right", padx=(0, self.count_x(10)))
+        clear_btn = tk.Button(shortcut_ctrl_frame, text="清空", font=self.default_font, width=5, command=self.clear_shortcut_combs, bg='white')
+        clear_btn.pack(side="right", padx=(0, 10))
 
-        add_btn = tk.Button(shortcut_ctrl_frame, text="+", font=self.default_font, width=self.count_x(3), command=self.add_shortcut_comb, bg='white')
-        add_btn.pack(side="right", padx=(0, self.count_x(10)))
+        add_btn = tk.Button(shortcut_ctrl_frame, text="+", font=self.default_font, width=3, command=self.add_shortcut_comb, bg='white')
+        add_btn.pack(side="right", padx=(0, 10))
 
         # 下拉框
         self.shortcut_comb_frame = tk.Frame(shortcut_ctrl_frame, bg='white')
-        self.shortcut_comb_frame.pack(fill="x", pady=(self.count_y(5), 0))
+        self.shortcut_comb_frame.pack(fill="x", pady=(5, 0))
         self.shortcut_combs = []
 
         self.load_shortcut_config()
 
         """按钮区域"""
         button_frame1 = tk.Frame(main_frame, bg='white')
-        button_frame1.grid(row=7, column=0, sticky="w", pady=(self.count_y(10), 0))
+        button_frame1.grid(row=7, column=0, sticky="w", pady=(10, 0))
         button_frame2 = tk.Frame(main_frame, bg='white')
-        button_frame2.grid(row=7, column=0, sticky="e", pady=(self.count_y(10), 0))
+        button_frame2.grid(row=7, column=0, sticky="e", pady=(10, 0))
 
         # 复原按钮
-        reset_btn = tk.Button(button_frame1, text="复原", font=self.default_font, width=self.count_x(7), 
+        reset_btn = tk.Button(button_frame1, text="复原", font=self.default_font, width=7, 
                             command=self.show_reset_confirm, bg='white')
-        reset_btn.grid(row=0, column=0, padx=(0, self.count_x(280)))
+        reset_btn.grid(row=0, column=0, padx=(0, 280))
 
         # 确定按钮
-        ok_btn = tk.Button(button_frame2, text="确定", font=self.default_font, width=self.count_x(7), 
+        ok_btn = tk.Button(button_frame2, text="确定", font=self.default_font, width=7, 
                           command=self.on_ok, bg='white')
-        ok_btn.grid(row=0, column=1, padx=(0, self.count_x(10)))
+        ok_btn.grid(row=0, column=1, padx=(0, 10))
 
         # 取消按钮
-        cancel_btn = tk.Button(button_frame2, text="取消", font=self.default_font, width=self.count_x(7), 
+        cancel_btn = tk.Button(button_frame2, text="取消", font=self.default_font, width=7, 
                              command=self.on_cancel, bg='white')
         cancel_btn.grid(row=0, column=2)
 
@@ -490,14 +490,14 @@ class ConfigTool:
         ]
 
         # 创建下拉框
-        comb = ttk.Combobox(self.shortcut_comb_frame, values=key_options, font=self.default_font, state="readonly", width=self.count_x(10))
+        comb = ttk.Combobox(self.shortcut_comb_frame, values=key_options, font=self.default_font, state="readonly", width=10)
         # 初始化选中值
         if init_key and init_key in key_options:
             comb.current(key_options.index(init_key))
         else:
             comb.current(0)
 
-        comb.pack(side="left", padx=(0, self.count_x(10)), pady=(0, self.count_y(5)))
+        comb.pack(side="left", padx=(0, 10), pady=(0, 5))
         self.shortcut_combs.append(comb)  # 加入管理列表
         # 绑定选择变化事件
         comb.bind("<<ComboboxSelected>>", self.update_shortcut_config)
@@ -581,8 +581,8 @@ class ConfigTool:
             confirm_win.tk.call('wm', 'iconphoto', confirm_win._w, icon_photo)
 
         # 设置窗口位置和大小
-        window_width = self.count_x(520)
-        window_height = self.count_y(220)
+        window_width = 520
+        window_height = 220
         screen_width = confirm_win.winfo_screenwidth()
         screen_height = confirm_win.winfo_screenheight()
         x = (screen_width - window_width) // 2
@@ -590,8 +590,8 @@ class ConfigTool:
         confirm_win.geometry(f"{window_width}x{window_height}+{x}+{y}")
 
         # 计算基础字体大小
-        self.warn_font_size = self.count_y(18) * -1
-        self.text_font_size = self.count_y(16) * -1
+        self.warn_font_size = -18
+        self.text_font_size = -16
 
         # 创建字体对象
         font_family = ["Microsoft YaHei", "sans-serif"]
@@ -599,27 +599,27 @@ class ConfigTool:
         self.text_font = (font_family[0], self.text_font_size)
 
         # 添加内容
-        label_1 = tk.Label(confirm_win, text="是否要恢复到默认设置？", font=self.warn_font, padx=self.count_x(20), pady=self.count_y(30), bg='white')
+        label_1 = tk.Label(confirm_win, text="是否要恢复到默认设置？", font=self.warn_font, padx=20, pady=30, bg='white')
         label_1.pack()
-        label_2 = tk.Label(confirm_win, text="此操作将清除您所有的自定义设置，且不可恢复。", font=self.text_font, padx=self.count_x(20), pady=0, bg='white')
+        label_2 = tk.Label(confirm_win, text="此操作将清除您所有的自定义设置，且不可恢复。", font=self.text_font, padx=20, pady=0, bg='white')
         label_2.pack()
 
         bottom_frame = tk.Frame(confirm_win, bg='white')
-        bottom_frame.pack(side='bottom', fill='x', pady=(self.count_y(0), self.count_y(5)))
+        bottom_frame.pack(side='bottom', fill='x', pady=(0, 5))
 
-        separator = tk.Frame(bottom_frame, height=self.count_y(2), bd=1, relief='sunken', bg='white')
-        separator.pack(fill='x', pady=self.count_y(5))
+        separator = tk.Frame(bottom_frame, height=2, bd=1, relief='sunken', bg='white')
+        separator.pack(fill='x', pady=5)
 
         button_frame = tk.Frame(bottom_frame, bg='white')
-        button_frame.pack(pady=self.count_y(10))
+        button_frame.pack(pady=10)
 
         # 确定按钮
-        ok_btn = tk.Button(button_frame, text="确定", width=self.count_x(10), command=lambda: self.reset_to_default(confirm_win), bg='white')
-        ok_btn.pack(side="left", padx=self.count_x(20))
+        ok_btn = tk.Button(button_frame, text="确定", width=10, command=lambda: self.reset_to_default(confirm_win), bg='white')
+        ok_btn.pack(side="left", padx=20)
 
         # 取消按钮
-        cancel_btn = tk.Button(button_frame, text="取消", width=self.count_x(10), command=confirm_win.destroy, bg='white')
-        cancel_btn.pack(side="right", padx=self.count_x(20))
+        cancel_btn = tk.Button(button_frame, text="取消", width=10, command=confirm_win.destroy, bg='white')
+        cancel_btn.pack(side="right", padx=20)
 
     def reset_to_default(self, confirm_win):
         """恢复默认设置"""
