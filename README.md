@@ -37,9 +37,12 @@ VDT_cfg_2.1.1.py为配置工具
 2. 此工具仅在用户本地存储配置数据，不会收集、上传任何用户信息。  
 3. 若需二次分发或商用，需提前联系作者获得授权。  
 ## 📦 获取工具 ![Windows](https://img.shields.io/badge/下载-Windows_应用程序-blue?logo=windows)
-### __VD_Toggler v2.1.1:__  
-压缩包：[VD_Toggler_2.1.1-rc_x64.zip](https://github.com/DaHedan/VD_Toggler/releases/download/v2.1.1-rc/VD_Toggler_2.1.1-rc_x64.zip)  
-安装包：[VD_Toggler_2.1.1-rc_x64_set_up.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v2.1.1-rc/VD_Toggler_2.1.1-rc_x64_set_up.exe)
+### Windows 64位系统：  
+压缩包：[VD_Toggler_2.1.1_x64.zip](https://github.com/DaHedan/VD_Toggler/releases/download/v2.1.1/VD_Toggler_2.1.1_x64.zip)  
+安装包：[VD_Toggler_2.1.1_x64_set_up.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v2.1.1/VD_Toggler_2.1.1_x64_set_up.exe)
+### Windows 32位系统：  
+压缩包：[VD_Toggler_2.1.1_x86.zip](https://github.com/DaHedan/VD_Toggler/releases/download/v2.1.1/VD_Toggler_2.1.1_x86.zip)  
+安装包：[VD_Toggler_2.1.1_x86_set_up.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v2.1.1/VD_Toggler_2.1.1_x86_set_up.exe)
 
-### __其他版本：__  
+### 其他版本：  
 [VD_Toggler v2.0.0](https://github.com/DaHedan/VD_Toggler/releases/tag/v2.0.0)
