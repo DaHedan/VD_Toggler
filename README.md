@@ -1,5 +1,5 @@
-# <img src="https://github.com/DaHedan/VD_Toggler/blob/main/img/els/VDT.png" alt="VD_Toggler" style="width:6%">  VD_Toggler_2.1 ![GitHub 版本](https://img.shields.io/github/v/release/DaHedan/VD_Toggler) ![许可证](https://img.shields.io/github/license/DaHedan/VD_Toggler) ![总下载量](https://img.shields.io/github/downloads/DaHedan/VD_Toggler/total) ![支持系统](https://img.shields.io/badge/Win10/11_x64-✓-green??logo=windows) ![最后提交](https://img.shields.io/github/last-commit/DaHedan/VD_Toggler)
-_为触屏制作的虚拟桌面UI工具_ - 无需键盘即可轻松使用 Windows 虚拟桌面（支持 Win10/11 x64）
+# <img src="https://github.com/DaHedan/VD_Toggler/blob/main/img/els/VDT.png" alt="VD_Toggler" style="width:6%">  VD_Toggler_2.1 ![GitHub 版本](https://img.shields.io/github/v/release/DaHedan/VD_Toggler) ![许可证](https://img.shields.io/github/license/DaHedan/VD_Toggler) ![总下载量](https://img.shields.io/github/downloads/DaHedan/VD_Toggler/total) ![支持系统](https://img.shields.io/badge/Windows_10/11-✓-green??logo=windows) ![最后提交](https://img.shields.io/github/last-commit/DaHedan/VD_Toggler)
+_为触屏制作的虚拟桌面UI工具_ - 无需键盘即可轻松使用 Windows 虚拟桌面（支持 Windows 10/11）
 ## 🗂️ 文件说明
 data/data.csv用于储存主程序的配置信息。
 img文件夹用于存放代码调用的图片文件。  
@@ -36,7 +36,7 @@ VDT_cfg_2.1.1.py为配置工具
 1. 此工具仅供非商业使用，用户需自行承担使用过程中的风险（如程序异常、设备问题等），作者不对任何直接或间接损失负责。  
 2. 此工具仅在用户本地存储配置数据，不会收集、上传任何用户信息。  
 3. 若需二次分发或商用，需提前联系作者获得授权。  
-## 📦 获取工具 ![Windows x64](https://img.shields.io/badge/下载-Windows_x64-blue?logo=windows)
+## 📦 获取工具 ![Windows](https://img.shields.io/badge/下载-Windows_应用程序-blue?logo=windows)
 ### __VD_Toggler v2.1.1:__  
 压缩包：[VD_Toggler_2.1.1-rc_x64.zip](https://github.com/DaHedan/VD_Toggler/releases/download/v2.1.1-rc/VD_Toggler_2.1.1-rc_x64.zip)  
 安装包：[VD_Toggler_2.1.1-rc_x64_set_up.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v2.1.1-rc/VD_Toggler_2.1.1-rc_x64_set_up.exe)
