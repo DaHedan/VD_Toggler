@@ -137,6 +137,8 @@ class VirtualDesktopToggler:
 
         for num, w, h, x, y in pos_settings:
             win = self.windows[f'win{num}']
+            win.minsize(int(w), int(h))
+            win.maxsize(int(w), int(h))
             win.geometry(f"{w}x{h}+{int(x)}+{int(y)}")
             self.win_sizes[f'win{num}'] = (w, h)
 
@@ -233,7 +235,9 @@ class VirtualDesktopToggler:
                         pyautogui.hotkey(*py_keys, presses=1, interval=0.05)
                         user32.ShowWindow(hwnd, 9)
                     self.go_left(None) if num==1 else self.go_right(None)
-                    self.animate_move_out()
+                    for w in ['win1','win2']:
+                        self.windows[w].withdraw()
+                    self.windows['win3'].deiconify()
                     return
 
                 else:
@@ -258,12 +262,12 @@ class VirtualDesktopToggler:
         self.go_left(None) if num==1 else self.go_right(None)
         self.update_appearance()
         self.check_main(None)
-        if self.judge_close_audio(None) == 1:
-            self.close_audio(None)
 
     def go_left(self, num):
         """win1事件"""
         pyautogui.hotkey('ctrl', 'win', 'left')
+        if self.judge_close_audio(None) == 1:
+            self.close_audio(None)
 
     def go_right(self, num):
         """win2事件"""
@@ -274,6 +278,8 @@ class VirtualDesktopToggler:
             self.create_desktop(None)
         else:
             pyautogui.hotkey('ctrl', 'win', 'right')
+        if self.judge_close_audio(None) == 1:
+            self.close_audio(None)
 
     def on_release(self, num):
         """主按钮释放事件"""
@@ -283,7 +289,6 @@ class VirtualDesktopToggler:
     def show_controls(self, event):
         """主按钮右击事件"""
         for w in ['win4','win5','win6','win7','win8','win9']:
-            self.windows[w].deiconify()
             self.windows[w].deiconify()
 
     def close_audio(self, num):
@@ -320,7 +325,7 @@ class VirtualDesktopToggler:
             key for key in shortcuts 
             if key in [
                 "Ctrl", "Alt", "Shift", "Win",
-                "Enter", "Space", "Backspace", "Tab", "Esc", "Left", "Right", "Up", "Down"
+                "Enter", "Space", "Backspace", "Tab", "Esc", "Left", "Right", "Up", "Down",
                 "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
                 "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
                 "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12",
@@ -485,4 +490,3 @@ class VirtualDesktopToggler:
 if __name__ == '__main__':
     app = VirtualDesktopToggler()
     app.root.mainloop()
-
