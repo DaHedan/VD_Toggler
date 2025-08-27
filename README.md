@@ -1,4 +1,4 @@
-# VD_Toggler_2.1 ![许可证](https://img.shields.io/github/license/DaHedan/VD_Toggler) ![GitHub 版本](https://img.shields.io/github/v/release/DaHedan/VD_Toggler) ![支持系统](https://img.shields.io/badge/Windows_10/11-✓-green??logo=windows) ![总下载量](https://img.shields.io/github/downloads/DaHedan/VD_Toggler/total) ![最后提交](https://img.shields.io/github/last-commit/DaHedan/VD_Toggler)
+# <img width="64" height="64" alt="VDT" src="https://github.com/user-attachments/assets/65090833-0ba9-41f2-b7b8-3d79ce2b9723" /> VD_Toggler_2.1 ![GitHub 版本](https://img.shields.io/github/v/release/DaHedan/VD_Toggler) ![许可证](https://img.shields.io/github/license/DaHedan/VD_Toggler) ![支持系统](https://img.shields.io/badge/OS-Windows_10/11-blue??logo=windows) ![总下载量](https://img.shields.io/github/downloads/DaHedan/VD_Toggler/total) ![最后提交](https://img.shields.io/github/last-commit/DaHedan/VD_Toggler)
 _为触屏制作的虚拟桌面UI工具_ - 无需键盘即可轻松使用 Windows 虚拟桌面（支持 Windows 10/11）
 ## 🗂️ 文件说明
 data/data.csv用于储存主程序的配置信息。
