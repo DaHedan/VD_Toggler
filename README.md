@@ -1,4 +1,4 @@
-# <img width="64" height="64" alt="VDT" src="https://github.com/user-attachments/assets/65090833-0ba9-41f2-b7b8-3d79ce2b9723" /> VD_Toggler_2.1 ![GitHub 版本](https://img.shields.io/github/v/release/DaHedan/VD_Toggler) ![许可证](https://img.shields.io/github/license/DaHedan/VD_Toggler) ![支持系统](https://img.shields.io/badge/OS-Windows_10/11-blue??logo=windows) ![总下载量](https://img.shields.io/github/downloads/DaHedan/VD_Toggler/total) ![最后提交](https://img.shields.io/github/last-commit/DaHedan/VD_Toggler)
+# <img width="32" height="32" alt="VDT" src="https://github.com/user-attachments/assets/65090833-0ba9-41f2-b7b8-3d79ce2b9723" /> VD_Toggler_2.1 ![GitHub 版本](https://img.shields.io/github/v/release/DaHedan/VD_Toggler) ![许可证](https://img.shields.io/github/license/DaHedan/VD_Toggler) ![支持系统](https://img.shields.io/badge/OS-Windows_10/11-blue??logo=windows) ![总下载量](https://img.shields.io/github/downloads/DaHedan/VD_Toggler/total) ![最后提交](https://img.shields.io/github/last-commit/DaHedan/VD_Toggler)
 _为触屏制作的虚拟桌面UI工具_ - 无需键盘即可轻松使用 Windows 虚拟桌面（支持 Windows 10/11）
 ## 🗂️ 文件说明
 data/data.csv用于储存主程序的配置信息。
@@ -8,7 +8,7 @@ VDT_cfg_2.1.1.py为配置工具
 ## 📚 依赖库
 此项目用到的Python标准库有：os、sys、tkinter、pyautogui、ctypes、PIL、subprocess、shutil、pyvda、pycaw、comtypes。
 ## 📜 许可协议
-本项目采用[MIT 许可证](https://github.com/DaHedan/VD_Toggler/blob/main/LICENSE)
+本项目采用 [MIT 许可证](https://github.com/DaHedan/VD_Toggler/blob/main/LICENSE)
 ## 🖥️ 功能介绍
 > 鼠标的右键点击操作对应触摸屏的长按操作
 ### 主程序VD_Toggler_2.1.1
@@ -37,6 +37,7 @@ VDT_cfg_2.1.1.py为配置工具
 2. 此工具仅在用户本地存储配置数据，不会收集、上传任何用户信息。  
 3. 若需二次分发或商用，需提前联系作者获得授权。  
 ## 📦 获取工具 ![Windows](https://img.shields.io/badge/下载-Windows_应用程序-blue?logo=windows)
+> 软件使用 PyInstaller 打包，由于技术原因，可能会被一些杀毒软件误报为病毒。如果您从本官方仓库下载，可以放心使用。
 ### Windows 64位系统：  
 压缩包：[VD_Toggler_2.1.1_x64.zip](https://github.com/DaHedan/VD_Toggler/releases/download/v2.1.1/VD_Toggler_2.1.1_x64.zip)  
 安装包：[VD_Toggler_2.1.1_x64_set_up.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v2.1.1/VD_Toggler_2.1.1_x64_set_up.exe)
