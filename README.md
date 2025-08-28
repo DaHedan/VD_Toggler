@@ -2,6 +2,7 @@
 _为触屏制作的虚拟桌面UI工具_ - 无需键盘即可轻松使用 Windows 虚拟桌面（支持 Windows 10/11）
 ## 🗂️ 文件说明
 data/data.csv用于储存主程序的配置信息。
+else文件夹用于备份data.csv以供VDT_cfg复原功能使用。
 img文件夹用于存放代码调用的图片文件。  
 VD_Toggler_2.1.1.py为主程序  
 VDT_cfg_2.1.1.py为配置工具  
