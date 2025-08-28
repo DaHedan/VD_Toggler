@@ -1,8 +1,8 @@
 # <img width="32" height="32" alt="VDT" src="https://github.com/user-attachments/assets/65090833-0ba9-41f2-b7b8-3d79ce2b9723" /> VD_Toggler_2.1 ![GitHub 版本](https://img.shields.io/github/v/release/DaHedan/VD_Toggler) ![许可证](https://img.shields.io/github/license/DaHedan/VD_Toggler) ![支持系统](https://img.shields.io/badge/OS-Windows_10/11-blue??logo=windows) ![总下载量](https://img.shields.io/github/downloads/DaHedan/VD_Toggler/total) ![最后提交](https://img.shields.io/github/last-commit/DaHedan/VD_Toggler)
 _为触屏制作的虚拟桌面UI工具_ - 无需键盘即可轻松使用 Windows 虚拟桌面（支持 Windows 10/11）
 ## 🗂️ 文件说明
-data/data.csv用于储存主程序的配置信息。
-else文件夹用于备份data.csv以供VDT_cfg复原功能使用。
+data/data.csv用于储存主程序的配置信息。  
+else文件夹用于备份data.csv以供VDT_cfg复原功能使用。  
 img文件夹用于存放代码调用的图片文件。  
 VD_Toggler_2.1.1.py为主程序  
 VDT_cfg_2.1.1.py为配置工具  
