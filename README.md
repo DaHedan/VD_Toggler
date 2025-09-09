@@ -51,4 +51,4 @@ VDT_cfg_2.1.1.py为配置工具
 安装包：[VD_Toggler_2.1.1_x86_set_up.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v2.1.1/VD_Toggler_2.1.1_x86_set_up.exe)
 
 ### 其他版本：  
-[VD_Toggler v2.0.0](https://github.com/DaHedan/VD_Toggler/releases/tag/v2.0.0)
+[VD_Toggler v2.0.1](https://github.com/DaHedan/VD_Toggler/releases/tag/v2.0.1)
