@@ -52,3 +52,6 @@ VDT_cfg_2.1.1.py为配置工具
 
 ### 其他版本：  
 [VD_Toggler v2.0.1](https://github.com/DaHedan/VD_Toggler/releases/tag/v2.0.1)
+
+测试版：  
+[VD_Toggler v2.2.0-alpha](https://github.com/DaHedan/VD_Toggler/releases/tag/v2.2.0-alpha)
