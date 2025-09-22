@@ -1,15 +1,30 @@
 # <img width="32" height="32" alt="VDT" src="https://github.com/user-attachments/assets/65090833-0ba9-41f2-b7b8-3d79ce2b9723" /> VD_Toggler_2.1 ![GitHub 版本](https://img.shields.io/github/v/release/DaHedan/VD_Toggler) ![许可证](https://img.shields.io/github/license/DaHedan/VD_Toggler) ![支持系统](https://img.shields.io/badge/OS-Windows_10/11-blue??logo=windows) ![总下载量](https://img.shields.io/github/downloads/DaHedan/VD_Toggler/total) ![最后提交](https://img.shields.io/github/last-commit/DaHedan/VD_Toggler)
 _为触屏制作的虚拟桌面UI工具_ - 无需键盘即可轻松使用 Windows 虚拟桌面（支持 Windows 10/11）
-## 🗂️ 文件说明
-data/data.csv用于储存主程序的配置信息。  
-else文件夹用于备份data.csv以供VDT_cfg复原功能使用。  
-img文件夹用于存放代码调用的图片文件。  
-VD_Toggler_2.1.1.py为主程序  
-VDT_cfg_2.1.1.py为配置工具  
-## 📚 依赖库
-此项目用到的Python标准库有：os、sys、tkinter、pyautogui、ctypes、PIL、subprocess、shutil、pyvda、pycaw、comtypes。
+
+想要了解关于 VD_Toggler 详细信息请查看对应版本的 [Wiki](https://github.com/DaHedan/VD_Toggler/wiki)。
+
 ## 📜 许可协议
 本项目采用 [MIT 许可证](https://github.com/DaHedan/VD_Toggler/blob/main/LICENSE)
+
+## 📦 获取工具 ![Windows](https://img.shields.io/badge/下载-Windows_应用程序-blue?logo=windows)
+> 软件使用 PyInstaller 打包，由于技术原因，可能会被一些杀毒软件误报为病毒。  
+如果您从本官方仓库下载，可以放心使用。
+
+* 如果你的需求是下载这个软件去使用，而不是需要源代码，请通过下面的链接去 [Releases](https://github.com/DaHedan/VD_Toggler/releases) 下载对应的文件，不要下载上面的 Code
+### Windows 64位系统：  
+压缩包（解压后直接使用）：[VD_Toggler_2.1.1_x64.zip](https://github.com/DaHedan/VD_Toggler/releases/download/v2.1.1/VD_Toggler_2.1.1_x64.zip)  
+安装包（安装后使用）：[VD_Toggler_2.1.1_x64_set_up.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v2.1.1/VD_Toggler_2.1.1_x64_set_up.exe)
+### Windows 32位系统：  
+压缩包（解压后直接使用）：[VD_Toggler_2.1.1_x86.zip](https://github.com/DaHedan/VD_Toggler/releases/download/v2.1.1/VD_Toggler_2.1.1_x86.zip)  
+安装包（安装后使用）：[VD_Toggler_2.1.1_x86_set_up.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v2.1.1/VD_Toggler_2.1.1_x86_set_up.exe)
+
+### 其他版本：  
+  * [VD_Toggler v2.0.1](https://github.com/DaHedan/VD_Toggler/releases/tag/v2.0.1)
+
+  * 测试版：
+    * [VD_Toggler v2.2.0-beta](https://github.com/DaHedan/VD_Toggler/releases/tag/v2.2.0-beta)
+    * [VD_Toggler v2.2.0-alpha](https://github.com/DaHedan/VD_Toggler/releases/tag/v2.2.0-alpha)
+
 ## 🖥️ 功能介绍
 > 鼠标的右键点击操作对应触摸屏的长按操作
 ### 主程序VD_Toggler_2.1.1
@@ -33,25 +48,12 @@ VDT_cfg_2.1.1.py为配置工具
 4. 点击中央窗口底部的“__确定__”按钮，可保留更改。  
 5. 点击中央窗口底部的“__取消__”按钮，可放弃更改。  
 6. 点击中央窗口底部的“__复原__”按钮，可恢复默认的配置数据。
+
 ## 📺 演示视频
 [<img width="810" height="540" alt="视频" src="https://github.com/user-attachments/assets/24542be8-d83d-4bfb-adb1-34e272cf3b0c" />
 ](https://www.bilibili.com/video/BV1W1hXzHEX1/)
+
 ## ⚠️ 用户须知
 1. 此工具仅供非商业使用，用户需自行承担使用过程中的风险（如程序异常、设备问题等），作者不对任何直接或间接损失负责。  
 2. 此工具仅在用户本地存储配置数据，不会收集、上传任何用户信息。  
 3. 若需二次分发或商用，需提前联系作者获得授权。  
-## 📦 获取工具 ![Windows](https://img.shields.io/badge/下载-Windows_应用程序-blue?logo=windows)
-> 软件使用 PyInstaller 打包，由于技术原因，可能会被一些杀毒软件误报为病毒。  
-如果您从本官方仓库下载，可以放心使用。
-### Windows 64位系统：  
-压缩包：[VD_Toggler_2.1.1_x64.zip](https://github.com/DaHedan/VD_Toggler/releases/download/v2.1.1/VD_Toggler_2.1.1_x64.zip)  
-安装包：[VD_Toggler_2.1.1_x64_set_up.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v2.1.1/VD_Toggler_2.1.1_x64_set_up.exe)
-### Windows 32位系统：  
-压缩包：[VD_Toggler_2.1.1_x86.zip](https://github.com/DaHedan/VD_Toggler/releases/download/v2.1.1/VD_Toggler_2.1.1_x86.zip)  
-安装包：[VD_Toggler_2.1.1_x86_set_up.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v2.1.1/VD_Toggler_2.1.1_x86_set_up.exe)
-
-### 其他版本：  
-[VD_Toggler v2.0.1](https://github.com/DaHedan/VD_Toggler/releases/tag/v2.0.1)
-
-测试版：  
-[VD_Toggler v2.2.0-alpha](https://github.com/DaHedan/VD_Toggler/releases/tag/v2.2.0-alpha)
