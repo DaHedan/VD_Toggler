@@ -50,8 +50,7 @@ _为触屏制作的虚拟桌面UI工具_ - 无需键盘即可轻松使用 Window
 6. 点击中央窗口底部的“__复原__”按钮，可恢复默认的配置数据。
 
 ## 📺 演示视频
-[<img width="810" height="540" alt="视频" src="https://github.com/user-attachments/assets/24542be8-d83d-4bfb-adb1-34e272cf3b0c" />
-](https://www.bilibili.com/video/BV1W1hXzHEX1/)
+[<img width="405" height="270" alt="视频" src="https://github.com/user-attachments/assets/28371477-f549-4bc2-83ac-f09ba111c519" />](https://www.bilibili.com/video/BV1W1hXzHEX1/)
 
 ## ⚠️ 用户须知
 1. 此工具仅供非商业使用，用户需自行承担使用过程中的风险（如程序异常、设备问题等），作者不对任何直接或间接损失负责。  
