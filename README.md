@@ -22,6 +22,7 @@ _为触屏制作的虚拟桌面UI工具_ - 无需键盘即可轻松使用 Window
   * [VD_Toggler v2.0.1](https://github.com/DaHedan/VD_Toggler/releases/tag/v2.0.1)
 
   * 测试版：
+    * [VD_Toggler v2.2.0-rc](https://github.com/DaHedan/VD_Toggler/releases/tag/v2.2.0-rc)
     * [VD_Toggler v2.2.0-beta](https://github.com/DaHedan/VD_Toggler/releases/tag/v2.2.0-beta)
     * [VD_Toggler v2.2.0-alpha](https://github.com/DaHedan/VD_Toggler/releases/tag/v2.2.0-alpha)
 
