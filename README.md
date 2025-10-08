@@ -10,7 +10,7 @@ _为触屏制作的虚拟桌面UI工具_ - 无需键盘即可轻松使用 Window
 > 软件使用 Nuitka（旧版本用了 PyInstaller）打包，由于技术原因，可能会被一些杀毒软件误报为病毒。  
 如果您从本官方仓库下载，可以放心使用。
 
-* 如果你的需求是下载这个软件去使用，而不是需要源代码，请点击下面的链接去 Github Releases 下载对应的文件，不要下载上面的 Code
+* 如果你的需求是下载这个软件去使用，而不是需要源代码，请点击下面的链接或者去 [Github Releases](https://github.com/DaHedan/VD_Toggler/releases) 下载对应的文件，不要下载上面的 Code
 ### Windows 64位系统：  
 压缩包（解压后直接使用）：[VD_Toggler_2.2.0_x64.zip](https://github.com/DaHedan/VD_Toggler/releases/download/v2.2.0/VD_Toggler_2.2.0_x64.zip)  
 安装包（安装后使用）：[VD_Toggler_2.2.0_x64_set_up.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v2.2.0/VD_Toggler_2.2.0_x64_set_up.exe)
