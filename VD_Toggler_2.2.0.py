@@ -2,19 +2,23 @@ import tkinter as tk
 from pyvda import get_virtual_desktops, VirtualDesktop
 import os
 import pyautogui
+import tempfile
 import ctypes
 from ctypes import cast, POINTER
+from ctypes import *
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from comtypes import CLSCTX_ALL
 from PIL import Image, ImageTk
 import subprocess
 
-# pyinstaller打包关闭启动画面
-try:
-    import pyi_splash
-    pyi_splash.close()
-except ImportError:
-    pass
+# nuitka打包关闭启动画面
+if "NUITKA_ONEFILE_PARENT" in os.environ:
+   splash_filename = os.path.join(
+      tempfile.gettempdir(),
+      "onefile_%d_splash_feedback.tmp" % int(os.environ["NUITKA_ONEFILE_PARENT"]),
+   )
+   if os.path.exists(splash_filename):
+      os.unlink(splash_filename)
 
 user32 = ctypes.windll.user32
 SCREEN_WIDTH = user32.GetSystemMetrics(0)
@@ -41,7 +45,7 @@ def load_config():
             scale_factor = float(all_lines[14].split(',')[0])
 
     return {
-        'WIN_HEIGHT_1': float(lines[0]) if len(lines) > 0 else 0.13,
+        'WIN_HEIGHT_1': float(lines[0]),
         'SCALE_FACTOR': scale_factor,
         'WIN_POSITIONS': {
             'win1_x': float(lines[1]),
@@ -54,6 +58,7 @@ def load_config():
             'x_y': float(lines[8]),
             'w_y': float(lines[9]),
             's_y': float(lines[10]),
+            'win3_y': float(lines[11])
         }
     }
 
@@ -71,8 +76,8 @@ class VirtualDesktopToggler:
         self.win_sizes = {}
         self.dragging = None
         self.orig_pos = {}
-        self.mode = int(open(r'data\data.csv', 'r', encoding='utf-8').readline().strip().split(',')[0]) if os.path.exists(r'data\data.csv') else 1
-        self.sub_mode = int(open(r'data\data.csv', 'r', encoding='utf-8').readline().strip().split(',')[1]) if os.path.exists(r'data\data.csv') else 0
+        self.mode = int(open(r'data\data.csv', 'r', encoding='utf-8').readline().strip().split(',')[0])
+        self.sub_mode = int(open(r'data\data.csv', 'r', encoding='utf-8').readline().strip().split(',')[1])
         self.setup_ui()
 
     def load_scaled_image(self, path, target_size):
@@ -124,9 +129,9 @@ class VirtualDesktopToggler:
             (1, base_size, base_size, SCREEN_WIDTH*WIN_POSITIONS['win1_x'], SCREEN_HEIGHT*(1-WIN_HEIGHT_1)),
             (2, base_size, base_size, SCREEN_WIDTH*WIN_POSITIONS['win2_x'], SCREEN_HEIGHT*(1-WIN_HEIGHT_1)),
             (3, *win3_size, 
-                SCREEN_WIDTH*WIN_POSITIONS['win3_x'] if int(open(r'data\data.csv').readline().split(',')[1]) == 1 
+                SCREEN_WIDTH*WIN_POSITIONS['win3_x'] if self.sub_mode == 1 
                 else (0 if self.mode == 2 else SCREEN_WIDTH - win3_size[0]), 
-                SCREEN_HEIGHT*(1-WIN_HEIGHT_1)),
+                SCREEN_HEIGHT*(1-WIN_HEIGHT_1) if self.sub_mode == 0 else SCREEN_HEIGHT*WIN_POSITIONS['win3_y']),
             (4, *control_size, SCREEN_WIDTH*WIN_POSITIONS['col_x'], SCREEN_HEIGHT*WIN_POSITIONS['h_y']),
             (5, *control_size, SCREEN_WIDTH*WIN_POSITIONS['col_x'], SCREEN_HEIGHT*WIN_POSITIONS['c_y']),
             (6, *control_size, SCREEN_WIDTH*WIN_POSITIONS['col_x'], SCREEN_HEIGHT*WIN_POSITIONS['a_y']),
@@ -152,16 +157,25 @@ class VirtualDesktopToggler:
         desktop_count = len(desktops)
         current_desktop = VirtualDesktop.current()
 
+        with open(r'data\data.csv', 'r') as f:
+            lines = f.readlines()
+            parts = lines[14].strip().split(',')
+            alpha1 = float(parts[2])
+        with open(r'data\data.csv', 'r') as f:
+            lines = f.readlines()
+            parts = lines[14].strip().split(',')
+            alpha2 = float(parts[3])
+
         alpha_config = {
-            1: ('L1', 0.3),
-            2: ('R1', 0.3) if current_desktop.number != desktop_count else ('RA', 0.3),
-            3: ('B2', 0.3) if self.mode == 2 else ('B1', 0.3),
-            4: ('H', 0.8),
-            5: ('C', 0.8),
-            6: ('A', 0.8),
-            7: ('X', 0.8),
-            8: ('W', 0.8),
-            9: ('S', 0.8),
+            1: ('L1', alpha1),
+            2: ('R1', alpha1) if current_desktop.number != desktop_count else ('RA', 0.3),
+            3: (('B2', alpha1) if self.mode == 2 else ('B1', alpha1)) if self.sub_mode == 0 else ('B3', alpha1),
+            4: ('H', alpha2),
+            5: ('C', alpha2),
+            6: ('A', alpha2),
+            7: ('X', alpha2),
+            8: ('W', alpha2),
+            9: ('S', alpha2),
         }
 
         for num in range(1,10):
@@ -182,22 +196,21 @@ class VirtualDesktopToggler:
             win.wm_attributes('-alpha', alpha) 
             self.orig_pos[f'win{num}'] = (win.winfo_x(), win.winfo_y())
 
-        # 隐藏控件
         for w in ['win3','win4','win5','win6','win7','win8','win9']:
             self.windows[w].withdraw()
-
             self.check_main(None)
 
     def bind_events(self):
         """按钮事件绑定"""
         for num in [1, 2]:
-            # 主按钮事件绑定
             self.windows[f'win{num}'].bind('<Button-1>', lambda e,n=num: self.on_press(n))
             self.windows[f'win{num}'].bind('<ButtonRelease-1>', lambda e,n=num: self.on_release(n))
             self.windows[f'win{num}'].bind('<Button-3>', self.show_controls)
 
-        # win3-9的事件绑定
         self.windows['win3'].bind('<Button-1>', self.restore_main)
+        self.windows['win3'].bind('<Button-3>', lambda e: self.on_drag_start(e)) if self.sub_mode == 1 else None
+        self.windows['win3'].bind('<B3-Motion>', lambda e: self.on_drag_motion(e)) if self.sub_mode == 1 else None
+        self.windows['win3'].bind('<ButtonRelease-3>', lambda e: self.on_drag_end(e)) if self.sub_mode == 1 else None
         self.windows['win4'].bind('<Button-1>', lambda e: self.hide_controls(animate=True))
         self.windows['win5'].bind('<Button-1>', lambda e: os._exit(0))
         self.windows['win6'].bind('<Button-1>', self.create_desktop)
@@ -207,15 +220,14 @@ class VirtualDesktopToggler:
 
     def on_press(self, num):
         """主按钮点击事件"""
-        hwnd = user32.GetForegroundWindow()  # 获取当前活动窗口
+        hwnd = user32.GetForegroundWindow()
 
         if self.windows['win4'].winfo_viewable():
             self.hide_controls()
             return
 
-        # 读取并转换快捷键
         shortcuts = self.read_shortcuts()
-        key_map = {  # 配置工具按键名 -> pyautogui对应名
+        key_map = {
             "Ctrl": "ctrl", "Alt": "alt", "Shift": "shift", "Win": "win",
             "Enter": "enter", "Space": "space", "Backspace": "backspace",
             "Tab": "tab", "Esc": "esc", "Left": "left", "Right": "right", "Up": "up", "Down": "down",
@@ -229,7 +241,6 @@ class VirtualDesktopToggler:
                 if line13[1] == '1':
                     win = self.windows[f'win{num}']
                     win.wm_attributes('-alpha', 0.5)
-                    # 触发快捷键
                     if py_keys:
                         user32.ShowWindow(hwnd, 6)
                         pyautogui.hotkey(*py_keys, presses=1, interval=0.05)
@@ -239,11 +250,9 @@ class VirtualDesktopToggler:
                         self.windows[w].withdraw()
                     self.windows['win3'].deiconify()
                     return
-
                 else:
                     win = self.windows[f'win{num}']
                     win.wm_attributes('-alpha', 0.5)
-                    # 触发快捷键
                     if py_keys:
                         user32.ShowWindow(hwnd, 6)
                         pyautogui.hotkey(*py_keys, presses=1, interval=0.05)
@@ -254,7 +263,6 @@ class VirtualDesktopToggler:
 
         win = self.windows[f'win{num}']
         win.wm_attributes('-alpha', 0.5)
-        # 触发快捷键
         if py_keys:
             user32.ShowWindow(hwnd, 6)
             pyautogui.hotkey(*py_keys, presses=1, interval=0.05)
@@ -262,6 +270,7 @@ class VirtualDesktopToggler:
         self.go_left(None) if num==1 else self.go_right(None)
         self.update_appearance()
         self.check_main(None)
+        self.lock_screen(None) if self.judge_lock_screen(None) == 1 else None
 
     def go_left(self, num):
         """win1事件"""
@@ -291,6 +300,22 @@ class VirtualDesktopToggler:
         for w in ['win4','win5','win6','win7','win8','win9']:
             self.windows[w].deiconify()
 
+    def judge_lock_screen(self, num):
+        with open(r'data\data.csv', 'r') as f:
+            lines = f.readlines()
+            return int(lines[13].split(',')[2])
+
+    def lock_screen(self, num):
+        HWND_BROADCAST = 0xffff
+        WM_SYSCOMMAND = 0x0112
+        SC_MONITORPOWER = 0xF170
+        MonitorPowerOff = 2
+        SW_SHOW = 5
+
+        windll.user32.PostMessageW(HWND_BROADCAST, WM_SYSCOMMAND, SC_MONITORPOWER, MonitorPowerOff)
+        shell32 = windll.LoadLibrary("shell32.dll")
+        shell32.ShellExecuteW(None,'open', 'rundll32.exe', 'USER32,LockWorkStation','',SW_SHOW)
+
     def close_audio(self, num):
         """静音操作"""
         if self.is_system_muted(None) == 0:
@@ -314,8 +339,6 @@ class VirtualDesktopToggler:
         """读取快捷键配置"""
         with open(r'data\data.csv', 'r', encoding='utf-8') as f:
             lines = f.readlines()
-        if len(lines) < 17:
-            return []
 
         shortcut_line = lines[16].strip()
         shortcuts = shortcut_line.split(',') if shortcut_line else []
@@ -387,7 +410,6 @@ class VirtualDesktopToggler:
 
     def launch_config_tool(self, event):
         """win9事件"""
-        # 隐藏所有窗口
         for w in self.windows.values():
             w.withdraw()
         self.root.withdraw()
@@ -396,7 +418,7 @@ class VirtualDesktopToggler:
         try:
             process = subprocess.Popen("VDT_cfg.exe")
         except:
-            process = subprocess.Popen(["python", "VDT_cfg_2.1.1.py"])
+            process = subprocess.Popen(["python", "VDT_cfg2.2.0.py"])
 
         def check_process():
             if process.poll() is None:
@@ -431,7 +453,6 @@ class VirtualDesktopToggler:
             win1_x = self.windows['win1'].winfo_x()
             win2_x = self.windows['win2'].winfo_x()
 
-            # 判断是否完全移出屏幕
             current_desktop = VirtualDesktop.current()
             if (hasattr(self, 'mode') and self.mode == 2 and ((win1_x > -100 or win2_x > -100) if current_desktop.number != 1 else win2_x > -100)) or \
                (not hasattr(self, 'mode') or self.mode == 1 and ((win1_x < SCREEN_WIDTH or win2_x < SCREEN_WIDTH) if current_desktop.number != 1 else win2_x < SCREEN_WIDTH)):
@@ -460,15 +481,59 @@ class VirtualDesktopToggler:
         self.update_appearance()
         current_desktop = VirtualDesktop.current()
         if current_desktop.number != 1:
-            # 更新窗口1的几何属性
             self.windows['win1'].geometry(f"{base_size}x{base_size}+{int(SCREEN_WIDTH * WIN_POSITIONS['win1_x'])}+{y_position}")
             self.windows['win1'].deiconify()
 
-        # 更新窗口2的几何属性
         self.windows['win2'].geometry(f"{base_size}x{base_size}+{int(SCREEN_WIDTH * WIN_POSITIONS['win2_x'])}+{y_position}")
         self.windows['win2'].deiconify()
 
         self.check_main(None)
+
+    def on_drag_start(self, event):
+        """win3拖动开始的处理"""
+        widget = event.widget.master 
+        self.dragging = widget
+        self.start_x = event.x_root
+        self.start_y = event.y_root
+        self.drag_orig_pos = (widget.winfo_x(), widget.winfo_y())
+
+    def on_drag_motion(self, event):
+        """win3拖动过程的处理"""
+        if not self.dragging:
+            return
+        delta_x = event.x_root - self.start_x
+        delta_y = event.y_root - self.start_y
+        new_x = self.drag_orig_pos[0] + delta_x
+        new_y = self.drag_orig_pos[1] + delta_y
+
+        # 更新被拖动窗口的位置
+        self.dragging.geometry(f"+{new_x}+{new_y}")
+
+    def on_drag_end(self, event):
+        """win3拖动结束的处理"""
+        if self.dragging and self.sub_mode == 1:
+            with open(r'data\data.csv', 'r', encoding='utf-8') as f:
+                lines = f.readlines()
+
+            mode_line = lines[0].strip().split(',') if len(lines) > 0 else ['1', '1']
+            current_mode = int(mode_line[0]) if len(mode_line) > 0 else 1
+            col_idx = 1 if current_mode == 1 else 2
+
+            win3_x_rel = round(self.windows['win3'].winfo_x() / SCREEN_WIDTH, 4)
+            win3_y_rel = round(self.windows['win3'].winfo_y() / SCREEN_HEIGHT, 4)
+
+            win3_x_parts = lines[4].strip().split(',')
+            win3_x_parts[col_idx] = str(win3_x_rel)
+            lines[4] = ','.join(win3_x_parts) + '\n'
+
+            win3_y_parts = lines[12].strip().split(',')
+            win3_y_parts[col_idx] = str(win3_y_rel)
+            lines[12] = ','.join(win3_y_parts) + '\n'
+
+            with open(r'data\data.csv', 'w', encoding='utf-8') as f:
+                f.writelines(lines)
+
+            self.dragging = None
 
     def check_main(self, event):
         for w in ['win1','win2']:
@@ -479,11 +544,9 @@ class VirtualDesktopToggler:
 
         current_desktop = VirtualDesktop.current()
         if current_desktop.number != 1:
-            # 更新窗口1的几何属性
             self.windows['win1'].geometry(f"{base_size}x{base_size}+{int(SCREEN_WIDTH * WIN_POSITIONS['win1_x'])}+{y_position}")
             self.windows['win1'].deiconify()
 
-        # 更新窗口2的几何属性
         self.windows['win2'].geometry(f"{base_size}x{base_size}+{int(SCREEN_WIDTH * WIN_POSITIONS['win2_x'])}+{y_position}")
         self.windows['win2'].deiconify()
 
