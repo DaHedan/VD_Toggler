@@ -1,0 +1,1327 @@
+﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:VD_Toggler_3"
+        xmlns:av="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="av"
+        x:Class="VD_Toggler_3.ConfigWindow"
+        Title="VD_Toggler 配置程序"
+        Width="800"
+        Height="600"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Cursor="Hand"
+        Icon="/img/app/cfg.ico">
+    <!-- 全局资源 -->
+    <Window.Resources>
+        <!-- 扁平化 TabControl 样式 -->
+        <Style x:Key="FlatTabControl" TargetType="{x:Type TabControl}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabControl}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <!-- 标签头容器 -->
+                            <TabPanel x:Name="HeaderPanel"
+                                      Grid.Row="0"
+                                      Background="Transparent"
+                                      IsItemsHost="True"
+                                      Panel.ZIndex="1"/>
+                            <!-- 内容区 -->
+                            <Border Grid.Row="1"
+                                    Background="Transparent"
+                                    BorderThickness="0">
+                                <ContentPresenter ContentSource="SelectedContent"/>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- 滚动条 -->
+        <Style x:Key="DropDownScrollBarStyle" TargetType="{x:Type ScrollBar}">
+            <!-- 轨道 -->
+            <Setter Property="Foreground"
+            Value="{DynamicResource ComboTextGradient}"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF1E2A5E" Offset="1"/>
+                        <GradientStop Color="#FF00105C" Offset="0"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Width" Value="10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ScrollBar}">
+                        <Grid x:Name="Root" Background="{TemplateBinding Background}">
+                            <Track x:Name="PART_Track" IsDirectionReversed="True">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.LineUpCommand" Opacity="0" IsHitTestVisible="False"/>
+                                </Track.DecreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb>
+                                        <Thumb.Template>
+                                            <ControlTemplate TargetType="{x:Type Thumb}">
+                                                <Border x:Name="thumbBg" CornerRadius="3">
+                                                    <Border.Background>
+                                                        <!-- 滑块 -->
+                                                        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                                            <GradientStop Color="#FF56AAAE" Offset="0"/>
+                                                            <GradientStop Color="#FF146876" Offset="1"/>
+                                                        </LinearGradientBrush>
+                                                    </Border.Background>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="thumbBg" Property="Opacity" Value="0.95"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsDragging" Value="True">
+                                                        <Setter TargetName="thumbBg" Property="Opacity" Value="1"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Thumb.Template>
+                                    </Thumb>
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.LineDownCommand" Opacity="0" IsHitTestVisible="False"/>
+                                </Track.IncreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <!-- 滚动条 -->
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <Setter TargetName="Root" Property="Width" Value="10"/>
+                            </Trigger>
+                            <Trigger Property="Orientation" Value="Horizontal">
+                                <Setter TargetName="Root" Property="Height" Value="10"/>
+                                <Setter TargetName="PART_Track" Property="IsDirectionReversed" Value="False"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- 键位下拉相关资源 -->
+        <ImageBrush x:Key="ComboBoxBg" ImageSource="/img/cfg/ComboBox.png" Stretch="Fill"/>
+        <LinearGradientBrush x:Key="ComboTextGradient" StartPoint="0.5,0" EndPoint="0.5,1">
+            <GradientStop Color="#FFEAEB77" Offset="0"/>
+            <GradientStop Color="#FFE5E5E5" Offset="0.5"/>
+        </LinearGradientBrush>
+        <local:KeyToDisplayConverter x:Key="KeyToDisplayConverter"/>
+        <DataTemplate x:Key="KeyItemTemplate">
+            <TextBlock Text="{Binding Converter={StaticResource KeyToDisplayConverter}}"/>
+        </DataTemplate>
+        <!-- 键位下拉基础样式 -->
+        <Style x:Key="KeyComboStyle" TargetType="{x:Type ComboBox}">
+            <Setter Property="Background" Value="{DynamicResource ComboBoxBg}"/>
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="MaxDropDownHeight" Value="200"/>
+            <Setter Property="Foreground" Value="{DynamicResource ComboTextGradient}"/>
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="{x:Type ComboBoxItem}">
+                        <Setter Property="Foreground"
+                                Value="{DynamicResource ComboTextGradient}"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ComboBox}">
+                        <Grid SnapsToDevicePixels="True"
+                              TextElement.Foreground="{TemplateBinding Foreground}">
+                            <!-- 背板 -->
+                            <Border x:Name="Bd"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="4"/>
+                            <!-- 点按区域 -->
+                            <ToggleButton x:Name="DropDownToggle"
+                                          Background="Transparent"
+                                          BorderBrush="{x:Null}"
+                                          Focusable="False"
+                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                          ClickMode="Press"/>
+                            <!-- 已选内容 -->
+                            <ContentPresenter Margin="6,0,22,0"
+                                              VerticalAlignment="Center"
+                                              Content="{TemplateBinding SelectionBoxItem}"
+                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                              ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                              RecognizesAccessKey="True"
+                                              IsHitTestVisible="False"/>
+                            <!-- 右侧箭头 -->
+                            <Path x:Name="Arrow"
+                                  IsHitTestVisible="False"
+                                  HorizontalAlignment="Right"
+                                  VerticalAlignment="Center"
+                                  Margin="0,0,6,0"
+                                  Width="10" Height="6"
+                                  Stretch="Fill"
+                                  Fill="{TemplateBinding Foreground}"
+                                  Data="M 0 0 L 5 5 L 10 0 Z"
+                                  SnapsToDevicePixels="True"/>
+                            <!-- 下拉 -->
+                            <Popup x:Name="PART_Popup"
+                                   Placement="Bottom"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   PopupAnimation="Slide">
+                                <Border BorderBrush="{x:Null}"
+                                        BorderThickness="1"
+                                        CornerRadius="4"
+                                        MaxHeight="200">
+                                    <Border.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="Black"/>
+                                            <GradientStop Color="#FF18004E" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <ScrollViewer CanContentScroll="True"
+                                                  VerticalScrollBarVisibility="Auto"
+                                                  HorizontalScrollBarVisibility="Disabled">
+                                        <ScrollViewer.Resources>
+                                            <Style TargetType="{x:Type ScrollBar}"
+                                                   BasedOn="{StaticResource DropDownScrollBarStyle}"/>
+                                        </ScrollViewer.Resources>
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- 下拉项悬停/选中背景 -->
+        <SolidColorBrush x:Key="ComboItemHoverBg" Color="#22FFFFFF"/>
+        <SolidColorBrush x:Key="ComboItemSelectedBg" Color="#44FFFFFF"/>
+        <!-- 键位下拉 -->
+        <Style x:Key="KeyComboGlowItemStyle" TargetType="{x:Type ComboBoxItem}">
+            <Setter Property="Foreground" Value="{DynamicResource ComboTextGradient}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Padding" Value="6,2"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="4"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter Margin="6,2" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource ComboItemHoverBg}"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource ComboItemSelectedBg}"/>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsSelected" Value="True"/>
+                                    <Condition Property="Selector.IsSelectionActive" Value="False"/>
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource ComboItemSelectedBg}"/>
+                            </MultiTrigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- 键位下拉样式 -->
+        <Style x:Key="KeyComboGlowStyle" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource KeyComboStyle}">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="ItemContainerStyle" Value="{StaticResource KeyComboGlowItemStyle}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ComboBox}">
+                        <Grid SnapsToDevicePixels="True" TextElement.Foreground="{TemplateBinding Foreground}">
+                            <!-- 背板 -->
+                            <Border x:Name="Bd"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="4"/>
+
+                            <!-- 发光层 -->
+                            <Border x:Name="Glow"
+                                    Background="Transparent"
+                                    CornerRadius="4"
+                                    BorderThickness="2"
+                                    Opacity="0"
+                                    IsHitTestVisible="False"
+                                    BorderBrush="{StaticResource ComboTextGradient}">
+                                <Border.Effect>
+                                    <BlurEffect Radius="8"/>
+                                </Border.Effect>
+                            </Border>
+
+                            <!-- 修改默认下拉按钮 -->
+                            <ToggleButton x:Name="DropDownToggle"
+                                          Background="Transparent"
+                                          BorderBrush="{x:Null}"
+                                          Focusable="False"
+                                          OverridesDefaultStyle="True"
+                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                          ClickMode="Press">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                        <Border Background="Transparent"/>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+                            <!-- 已选内容 -->
+                            <ContentPresenter Margin="6,0,22,0"
+                                              VerticalAlignment="Center"
+                                              Content="{TemplateBinding SelectionBoxItem}"
+                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                              ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                              RecognizesAccessKey="True"
+                                              IsHitTestVisible="False"/>
+
+                            <!-- 右侧箭头 -->
+                            <Path x:Name="Arrow"
+                                  IsHitTestVisible="False"
+                                  HorizontalAlignment="Right"
+                                  VerticalAlignment="Center"
+                                  Margin="0,0,6,0" Width="10" Height="6" Stretch="Fill"
+                                  Fill="{TemplateBinding Foreground}"
+                                  Data="M 0 0 L 5 5 L 10 0 Z"
+                                  SnapsToDevicePixels="True"/>
+
+                            <!-- 下拉 -->
+                            <Popup x:Name="PART_Popup"
+                                   Placement="Bottom"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   PopupAnimation="Slide">
+                                <Border BorderBrush="{x:Null}"
+                                        BorderThickness="1"
+                                        CornerRadius="4"
+                                        MaxHeight="200">
+                                    <Border.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="Black"/>
+                                            <GradientStop Color="#FF18004E" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <ScrollViewer CanContentScroll="True"
+                                                  VerticalScrollBarVisibility="Auto"
+                                                  HorizontalScrollBarVisibility="Disabled">
+                                        <ScrollViewer.Resources>
+                                            <Style TargetType="{x:Type ScrollBar}"
+                                                   BasedOn="{StaticResource DropDownScrollBarStyle}"/>
+                                        </ScrollViewer.Resources>
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <!-- 悬停/聚焦/展开显示发光 -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Glow" Property="Opacity" Value="1"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter TargetName="Glow" Property="Opacity" Value="1"/>
+                            </Trigger>
+                            <Trigger Property="IsDropDownOpen" Value="True">
+                                <Setter TargetName="Glow" Property="Opacity" Value="1"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- 单选按钮样式 -->
+        <Style x:Key="RadioCircleStyle" TargetType="{x:Type RadioButton}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Grid Margin="0" SnapsToDevicePixels="True">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <!-- 左侧圆点区域 -->
+                            <Grid Width="16" Height="16"
+                                  HorizontalAlignment="Left"
+                                  VerticalAlignment="Center"
+                                  Margin="2,0,0,0">
+                                <!-- 发光层 -->
+                                <Border x:Name="RadioGlow"
+                                        Background="Transparent"
+                                        CornerRadius="10"
+                                        BorderThickness="2"
+                                        Opacity="0"
+                                        IsHitTestVisible="False"
+                                        BorderBrush="{StaticResource ComboTextGradient}">
+                                    <Border.Effect>
+                                        <BlurEffect Radius="10"/>
+                                    </Border.Effect>
+                                </Border>
+                                <!-- 圆点图标 -->
+                                <Image x:Name="Icon"
+                                       Width="16" Height="16"
+                                       Source="/img/cfg/RadioButtonOff.png"
+                                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                            </Grid>
+                            <!-- 文本 -->
+                            <ContentPresenter Grid.Column="1"
+                                              Margin="8,0,0,0"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <!-- 显示发光 -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="RadioGlow" Property="Opacity" Value="1"/>
+                            </Trigger>
+                            <!-- 选中 -->
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Icon" Property="Source"
+                                        Value="/img/cfg/RadioButtonOn.png"/>
+                            </Trigger>
+                            <!-- 按下 -->
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- 轨道颜色 -->
+        <SolidColorBrush x:Key="SliderTrackBgBrush" Color="#FF0A5472"/>
+        <Style x:Key="RoundedTrackSlider" TargetType="{x:Type Slider}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Slider}">
+                        <Grid x:Name="Root">
+                            <!-- 背景轨道 -->
+                            <Border x:Name="TrackBackground"
+                                    Height="8"
+                                    CornerRadius="4"
+                                    Background="{StaticResource SliderTrackBgBrush}"
+                                    VerticalAlignment="Center"/>
+                            <!-- 两端透明 -->
+                            <Track x:Name="PART_Track"
+                                   Margin="0"
+                                   VerticalAlignment="Center"
+                                   Maximum="{TemplateBinding Maximum}"
+                                   Minimum="{TemplateBinding Minimum}"
+                                   Value="{TemplateBinding Value}"
+                                   Orientation="{TemplateBinding Orientation}">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="Slider.DecreaseLarge"
+                                                  Background="Transparent"
+                                                  BorderBrush="{x:Null}"
+                                                  Focusable="False">
+                                        <RepeatButton.Template>
+                                            <ControlTemplate TargetType="{x:Type RepeatButton}">
+                                                <Border Background="Transparent" CornerRadius="4"/>
+                                            </ControlTemplate>
+                                        </RepeatButton.Template>
+                                    </RepeatButton>
+                                </Track.DecreaseRepeatButton>
+                                <!-- 滑块 -->
+                                <Track.Thumb>
+                                    <Thumb Width="24" Height="16">
+                                        <Thumb.Template>
+                                            <ControlTemplate TargetType="{x:Type Thumb}">
+                                                <Grid>
+                                                    <Border x:Name="ThumbBg" Width="24" Height="16" CornerRadius="8">
+                                                        <Border.Background>
+                                                            <ImageBrush ImageSource="/img/cfg/SolidTrack.png" Stretch="Fill"/>
+                                                        </Border.Background>
+                                                        <Border.Effect>
+                                                            <DropShadowEffect BlurRadius="8" ShadowDepth="0" Opacity="0.35"/>
+                                                        </Border.Effect>
+                                                    </Border>
+                                                    <!-- 发光层 -->
+                                                    <Border x:Name="ThumbGlow"
+                                                            Background="Transparent"
+                                                            CornerRadius="8"
+                                                            BorderThickness="2"
+                                                            Opacity="0"
+                                                            IsHitTestVisible="False"
+                                                            BorderBrush="{StaticResource ComboTextGradient}">
+                                                        <Border.Effect>
+                                                            <BlurEffect Radius="8"/>
+                                                        </Border.Effect>
+                                                    </Border>
+                                                </Grid>
+                                                <ControlTemplate.Triggers>
+                                                    <!-- 显示发光 -->
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="ThumbGlow" Property="Opacity" Value="1"/>
+                                                    </Trigger>
+                                                    <!-- 拖动 -->
+                                                    <Trigger Property="IsDragging" Value="True">
+                                                        <Setter TargetName="ThumbGlow" Property="Opacity" Value="0.85"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Thumb.Template>
+                                    </Thumb>
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Command="Slider.IncreaseLarge"
+                                                  Background="Transparent"
+                                                  BorderBrush="{x:Null}"
+                                                  Focusable="False">
+                                        <RepeatButton.Template>
+                                            <ControlTemplate TargetType="{x:Type RepeatButton}">
+                                                <Border Background="Transparent" CornerRadius="4"/>
+                                            </ControlTemplate>
+                                        </RepeatButton.Template>
+                                    </RepeatButton>
+                                </Track.IncreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <Setter TargetName="Root" Property="LayoutTransform">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="-90"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Root" Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--- 下拉框右侧按钮样式 -->
+        <Style x:Key="GlowImageButton" TargetType="{x:Type Button}">
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+            <Setter Property="Background" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid SnapsToDevicePixels="True">
+                            <Border x:Name="Bg" Background="{TemplateBinding Background}" CornerRadius="4"/>
+                            <!-- 发光层 -->
+                            <Border x:Name="Glow"
+                                    Background="Transparent"
+                                    CornerRadius="4"
+                                    BorderThickness="2"
+                                    Opacity="0"
+                                    BorderBrush="{StaticResource ComboTextGradient}">
+                                <Border.Effect>
+                                    <BlurEffect Radius="8"/>
+                                </Border.Effect>
+                            </Border>
+
+                            <!-- 按钮内容 -->
+                            <ContentPresenter Margin="0"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True"
+                                              TextElement.Foreground="{TemplateBinding Foreground}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <!-- 悬停 -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Glow" Property="Opacity" Value="1"/>
+                            </Trigger>
+                            <!-- 按下 -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Bg" Property="Opacity" Value="0.9"/>
+                                <Setter TargetName="Glow" Property="Opacity" Value="0.85"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- 下方按钮样式 -->
+        <Style x:Key="GlowImageButtonMain" TargetType="{x:Type Button}" BasedOn="{StaticResource GlowImageButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid SnapsToDevicePixels="True">
+                            <Border x:Name="Bg" Background="{TemplateBinding Background}" CornerRadius="14"/>
+                            <!-- 发光层 -->
+                            <Border x:Name="Glow"
+                                    Background="Transparent"
+                                    CornerRadius="14"
+                                    BorderThickness="2"
+                                    Opacity="0"
+                                    IsHitTestVisible="False"
+                                    BorderBrush="{StaticResource ComboTextGradient}">
+                                <Border.Effect>
+                                    <BlurEffect Radius="8"/>
+                                </Border.Effect>
+                            </Border>
+                            <ContentPresenter Margin="0"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      RecognizesAccessKey="True"
+                                      TextElement.Foreground="{TemplateBinding Foreground}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Glow" Property="Opacity" Value="1"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Bg" Property="Opacity" Value="0.9"/>
+                                <Setter TargetName="Glow" Property="Opacity" Value="0.85"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <!-- 窗口背景 -->
+    <Window.Background>
+        <ImageBrush ImageSource="/img/cfg/Background.png"/>
+    </Window.Background>
+    <Grid Height="584" Width="802">
+        <Grid.Background>
+            <ImageBrush ImageSource="/img/cfg/Background.png"/>
+        </Grid.Background>
+        <TabControl HorizontalAlignment="Center" Height="502" VerticalAlignment="Top" Width="800" BorderBrush="{x:Null}">
+            <TabControl.Resources>
+                <ImageBrush x:Key="TabHeaderSelected" ImageSource="/img/cfg/BackgroundTabTop1.png" Stretch="Fill"/>
+                <ImageBrush x:Key="TabHeaderUnselected" ImageSource="/img/cfg/BackgroundTabTop2.png" Stretch="Fill"/>
+                <!-- TabItem 样式 -->
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="Margin" Value="0"/>
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type TabItem}">
+                                <Grid SnapsToDevicePixels="True">
+                                    <Border x:Name="Bd" Background="{StaticResource TabHeaderUnselected}"/>
+                                    <!-- 发光层 -->
+                                    <Border x:Name="Glow"
+                                            Background="Transparent"
+                                            CornerRadius="4"
+                                            BorderThickness="2"
+                                            Opacity="0"
+                                            IsHitTestVisible="False"
+                                            BorderBrush="{StaticResource ComboTextGradient}">
+                                        <Border.Effect>
+                                            <BlurEffect Radius="8"/>
+                                        </Border.Effect>
+                                    </Border>
+                                    <!-- 标题内容 -->
+                                    <ContentPresenter ContentSource="Header"
+                                                      Margin="12,6"
+                                                      HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"
+                                                      IsHitTestVisible="False"/>
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <!-- 选中 -->
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="{StaticResource TabHeaderSelected}"/>
+                                    </Trigger>
+                                    <!-- 悬停 -->
+                                    <Trigger SourceName="Bd" Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Glow" Property="Opacity" Value="1"/>
+                                    </Trigger>
+                                    <!-- 移出 -->
+                                    <Trigger SourceName="Bd" Property="IsMouseOver" Value="False">
+                                        <Setter TargetName="Glow" Property="Opacity" Value="0"/>
+                                    </Trigger>
+                                    <!-- 按下 -->
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter TargetName="Bd" Property="Opacity" Value="0.6"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
+            <TabControl.Style>
+                <StaticResource ResourceKey="FlatTabControl"/>
+            </TabControl.Style>
+            <TabControl.Background>
+                <ImageBrush ImageSource="/img/cfg/Background.png"/>
+            </TabControl.Background>
+            <!-- 功能页 -->
+            <TabItem Header="功能" BorderBrush="{x:Null}" Background="{x:Null}">
+                <TabItem.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFEAEB77" Offset="0"/>
+                        <GradientStop Color="#FFE5E5E5" Offset="0.5"/>
+                    </LinearGradientBrush>
+                </TabItem.Foreground>
+                <Grid Height="466">
+                    <Grid.Resources>
+                        <!-- 主按钮样式 -->
+                        <Style x:Key="ToggleSwitchStyle" TargetType="{x:Type ToggleButton}">
+                            <Setter Property="Width" Value="52"/>
+                            <Setter Property="Height" Value="28"/>
+                            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                        <Grid x:Name="Root" SnapsToDevicePixels="True">
+                                            <VisualStateManager.VisualStateGroups>
+                                                <VisualStateGroup x:Name="CommonStates">
+                                                    <VisualState x:Name="Normal">
+                                                        <Storyboard>
+                                                            <!-- 发光复位 -->
+                                                            <DoubleAnimation Storyboard.TargetName="KnobGlow"
+                                                                             Storyboard.TargetProperty="Opacity"
+                                                                             To="0" Duration="0:0:0.08"/>
+                                                        </Storyboard>
+                                                    </VisualState>
+                                                    <VisualState x:Name="MouseOver">
+                                                        <Storyboard>
+                                                            <DoubleAnimation Storyboard.TargetName="KnobScale" Storyboard.TargetProperty="ScaleX" To="1.05" Duration="0:0:0.08"/>
+                                                            <DoubleAnimation Storyboard.TargetName="KnobScale" Storyboard.TargetProperty="ScaleY" To="1.05" Duration="0:0:0.08"/>
+                                                            <!-- 发光加强 -->
+                                                            <DoubleAnimation Storyboard.TargetName="KnobGlow"
+                                                                             Storyboard.TargetProperty="Opacity"
+                                                                             To="1" Duration="0:0:0.08"/>
+                                                        </Storyboard>
+                                                    </VisualState>
+                                                    <VisualState x:Name="Pressed">
+                                                        <Storyboard>
+                                                            <DoubleAnimation Storyboard.TargetName="KnobScale" Storyboard.TargetProperty="ScaleX" To="0.95" Duration="0:0:0.08"/>
+                                                            <DoubleAnimation Storyboard.TargetName="KnobScale" Storyboard.TargetProperty="ScaleY" To="0.95" Duration="0:0:0.08"/>
+                                                            <!-- 发光略减弱 -->
+                                                            <DoubleAnimation Storyboard.TargetName="KnobGlow"
+                                                                             Storyboard.TargetProperty="Opacity"
+                                                                             To="0.85" Duration="0:0:0.08"/>
+                                                        </Storyboard>
+                                                    </VisualState>
+                                                    <VisualState x:Name="Disabled">
+                                                        <Storyboard>
+                                                            <DoubleAnimation Storyboard.TargetName="Root" Storyboard.TargetProperty="Opacity" To="0.6" Duration="0:0:0.1"/>
+                                                        </Storyboard>
+                                                    </VisualState>
+                                                </VisualStateGroup>
+                                                <VisualStateGroup x:Name="CheckStates">
+                                                    <VisualState x:Name="Unchecked">
+                                                        <Storyboard>
+                                                            <!-- 滑块回左 -->
+                                                            <DoubleAnimation Storyboard.TargetName="KnobTranslate" Storyboard.TargetProperty="X" To="0" Duration="0:0:0.12">
+                                                                <DoubleAnimation.EasingFunction>
+                                                                    <CubicEase EasingMode="EaseOut"/>
+                                                                </DoubleAnimation.EasingFunction>
+                                                            </DoubleAnimation>
+                                                            <DoubleAnimation Storyboard.TargetName="TrackOff" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.12"/>
+                                                            <DoubleAnimation Storyboard.TargetName="TrackOn" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.12"/>
+                                                        </Storyboard>
+                                                    </VisualState>
+                                                    <VisualState x:Name="Checked">
+                                                        <Storyboard>
+                                                            <!-- 滑块右移 -->
+                                                            <DoubleAnimation Storyboard.TargetName="KnobTranslate" Storyboard.TargetProperty="X" To="24" Duration="0:0:0.12">
+                                                                <DoubleAnimation.EasingFunction>
+                                                                    <CubicEase EasingMode="EaseOut"/>
+                                                                </DoubleAnimation.EasingFunction>
+                                                            </DoubleAnimation>
+                                                            <DoubleAnimation Storyboard.TargetName="TrackOff" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.12"/>
+                                                            <DoubleAnimation Storyboard.TargetName="TrackOn" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.12"/>
+                                                        </Storyboard>
+                                                    </VisualState>
+                                                </VisualStateGroup>
+                                            </VisualStateManager.VisualStateGroups>
+                                            <!-- 背景轨道 -->
+                                            <Border x:Name="SwitchTrack" CornerRadius="14" Background="Transparent">
+                                                <Grid>
+                                                    <!-- 关态图 -->
+                                                    <Border x:Name="TrackOff" CornerRadius="14" Opacity="1">
+                                                        <Border.Background>
+                                                            <ImageBrush ImageSource="/img/cfg/BorderBackOff.png" Stretch="Fill"/>
+                                                        </Border.Background>
+                                                    </Border>
+                                                    <!-- 开态图 -->
+                                                    <Border x:Name="TrackOn" CornerRadius="14" Opacity="0">
+                                                        <Border.Background>
+                                                            <ImageBrush ImageSource="/img/cfg/BorderBackOn.png" Stretch="Fill"/>
+                                                        </Border.Background>
+                                                    </Border>
+                                                </Grid>
+                                            </Border>
+                                            <!-- 旋钮 -->
+                                            <Grid x:Name="KnobHost" Width="24" Height="24" HorizontalAlignment="Left" Margin="2" RenderTransformOrigin="0.5,0.5">
+                                                <Border x:Name="Knob" Width="24" Height="24" CornerRadius="12">
+                                                    <Border.Background>
+                                                        <ImageBrush ImageSource="/img/cfg/BorderPoint.png"/>
+                                                    </Border.Background>
+                                                    <Border.Effect>
+                                                        <DropShadowEffect BlurRadius="6" ShadowDepth="0" Opacity="0.25"/>
+                                                    </Border.Effect>
+                                                </Border>
+                                                <!-- 发光层 -->
+                                                <Border x:Name="KnobGlow"
+                                                        Width="24" Height="24"
+                                                        CornerRadius="12"
+                                                        Background="Transparent"
+                                                        BorderThickness="2"
+                                                        Opacity="0"
+                                                        IsHitTestVisible="False"
+                                                        BorderBrush="{StaticResource ComboTextGradient}">
+                                                    <Border.Effect>
+                                                        <BlurEffect Radius="8"/>
+                                                    </Border.Effect>
+                                                </Border>
+                                                <Grid.RenderTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform x:Name="KnobScale" ScaleX="1" ScaleY="1"/>
+                                                        <TranslateTransform x:Name="KnobTranslate" X="0" Y="0"/>
+                                                    </TransformGroup>
+                                                </Grid.RenderTransform>
+                                            </Grid>
+
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Background" Value="#FF697E91"/>
+                        </Style>
+                    </Grid.Resources>
+                    <Grid.Background>
+                        <ImageBrush ImageSource="/img/cfg/BackgroundTab1.png"/>
+                    </Grid.Background>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- 大标题：自动静音 -->
+                    <TextBlock FontSize="20"
+                               Margin="20,14,20,14"
+                               FontStyle="Italic"
+                               FontWeight="Bold"
+                               Text="自动静音">
+                        <TextBlock.Foreground>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FF8A8C9A" Offset="0.938"/>
+                                <GradientStop Color="White" Offset="0"/>
+                                <GradientStop Color="#FF4D4DD2" Offset="1"/>
+                                <GradientStop Color="White" Offset="0.641"/>
+                                <GradientStop Color="#FF8A8C9A" Offset="0.875"/>
+                            </LinearGradientBrush>
+                        </TextBlock.Foreground>
+                    </TextBlock>
+
+                    <!-- 小标题 + 波动开关 -->
+                    <Grid Grid.Row="1" Margin="54,0,20,0" VerticalAlignment="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="在切换桌面后开启静音"
+                                   VerticalAlignment="Center"
+                                   FontSize="14"
+                                   Margin="0,8,16,8"
+                                   FontWeight="Bold">
+                            <TextBlock.Foreground>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEAEB77" Offset="0"/>
+                                    <GradientStop Color="#FFE5E5E5" Offset="0.5"/>
+                                </LinearGradientBrush>
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <ToggleButton Grid.Column="1"
+                                      Style="{StaticResource ToggleSwitchStyle}"
+                                      VerticalAlignment="Center"
+                                      IsChecked="{Binding AutoMuteOnVDChange, Mode=TwoWay, Source={x:Static local:PositionSettings.Current}, UpdateSourceTrigger=PropertyChanged}" Margin="460,0,52,0"/>
+
+                        <!-- 大标题：自动熄屏 -->
+                    </Grid>
+                    <TextBlock FontSize="20"
+                               Margin="20,28,20,326"
+                               FontStyle="Italic"
+                               FontWeight="Bold"
+                               Text="自动熄屏"
+                               Grid.Row="2">
+                        <TextBlock.Foreground>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FF8A8C9A" Offset="0.938"/>
+                                <GradientStop Color="White" Offset="0"/>
+                                <GradientStop Color="#FF4D4DD2" Offset="1"/>
+                                <GradientStop Color="White" Offset="0.641"/>
+                                <GradientStop Color="#FF8A8C9A" Offset="0.875"/>
+                            </LinearGradientBrush>
+                        </TextBlock.Foreground>
+                    </TextBlock>
+                    <Grid Grid.Row="2" Margin="54,67,20,0" VerticalAlignment="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="在切换桌面后熄屏休眠"
+                                   VerticalAlignment="Center"
+                                   FontSize="14"
+                                   Margin="0,8,16,8"
+                                   FontWeight="Bold">
+                            <TextBlock.Foreground>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEAEB77" Offset="0"/>
+                                    <GradientStop Color="#FFE5E5E5" Offset="0.5"/>
+                                </LinearGradientBrush>
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <ToggleButton Grid.Column="1"
+                                      Style="{StaticResource ToggleSwitchStyle}"
+                                      VerticalAlignment="Center"
+                                      IsChecked="{Binding AutoTurnOffScreen, Mode=TwoWay, Source={x:Static local:PositionSettings.Current}, UpdateSourceTrigger=PropertyChanged}" Margin="460,0,52,0"/>
+
+                    <!-- 大标题：自动快捷键 -->
+                    </Grid>
+                    <TextBlock FontSize="20"
+                               Margin="20,134,20,220"
+                               FontStyle="Italic"
+                               FontWeight="Bold"
+                               Text="自动快捷键" Grid.Row="2">
+                        <TextBlock.Foreground>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FF8A8C9A" Offset="0.938"/>
+                                <GradientStop Color="White" Offset="0"/>
+                                <GradientStop Color="#FF4D4DD2" Offset="1"/>
+                                <GradientStop Color="White" Offset="0.641"/>
+                                <GradientStop Color="#FF8A8C9A" Offset="0.875"/>
+                            </LinearGradientBrush>
+                        </TextBlock.Foreground>
+                    </TextBlock>
+                    <Grid Grid.Row="2" Margin="54,0,10,0" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="在切换桌面前触发的快捷键："
+                                   VerticalAlignment="Center"
+                                   FontSize="14"
+                                   Margin="0,8,16,8"
+                                   FontWeight="Bold">
+                            <TextBlock.Foreground>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEAEB77" Offset="0"/>
+                                    <GradientStop Color="#FFE5E5E5" Offset="0.5"/>
+                                </LinearGradientBrush>
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <ComboBox x:Name="keyboard1" Style="{StaticResource KeyComboGlowStyle}" Visibility="Collapsed" ItemTemplate="{StaticResource KeyItemTemplate}" ItemsSource="{x:Static local:KeysProvider.AllKeys}" SelectedItem="{Binding PreSwitchKey1, Mode=TwoWay, Source={x:Static local:PositionSettings.Current}}" HorizontalAlignment="Left" Height="24" Margin="187,0,0,0" VerticalAlignment="Center" Width="100" Grid.ColumnSpan="2" BorderBrush="{x:Null}" Background="{DynamicResource ComboBoxBg}"/>
+                        <ComboBox x:Name="keyboard2" Style="{StaticResource KeyComboGlowStyle}" Visibility="Collapsed" ItemTemplate="{StaticResource KeyItemTemplate}" ItemsSource="{x:Static local:KeysProvider.AllKeys}" SelectedItem="{Binding PreSwitchKey2, Mode=TwoWay, Source={x:Static local:PositionSettings.Current}}" HorizontalAlignment="Left" Height="24" Margin="94,0,0,0" VerticalAlignment="Center" Width="100" Grid.Column="1" BorderBrush="{x:Null}" Background="{DynamicResource ComboBoxBg}"/>
+                        <ComboBox x:Name="keyboard3" Style="{StaticResource KeyComboGlowStyle}" Visibility="Collapsed" ItemTemplate="{StaticResource KeyItemTemplate}" ItemsSource="{x:Static local:KeysProvider.AllKeys}" SelectedItem="{Binding PreSwitchKey3, Mode=TwoWay, Source={x:Static local:PositionSettings.Current}}" HorizontalAlignment="Left" Height="24" Margin="199,0,0,0" VerticalAlignment="Center" Width="100" Grid.Column="1" BorderBrush="{x:Null}" Background="{DynamicResource ComboBoxBg}"/>
+                        <ComboBox x:Name="keyboard4" Style="{StaticResource KeyComboGlowStyle}" Visibility="Collapsed" ItemTemplate="{StaticResource KeyItemTemplate}" ItemsSource="{x:Static local:KeysProvider.AllKeys}" SelectedItem="{Binding PreSwitchKey4, Mode=TwoWay, Source={x:Static local:PositionSettings.Current}}" HorizontalAlignment="Left" Height="24" Margin="304,0,0,0" VerticalAlignment="Center" Width="100" Grid.Column="1" BorderBrush="{x:Null}" Background="{DynamicResource ComboBoxBg}"/>
+                        <Button x:Name="button_clear" Style="{StaticResource GlowImageButton}" Grid.Column="1" Content="清空" HorizontalAlignment="Left" Height="26" Margin="472,0,0,0" VerticalAlignment="Center" Width="50" Click="button_clear_Click" BorderBrush="{x:Null}">
+                            <Button.Foreground>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEAEB77" Offset="0"/>
+                                    <GradientStop Color="#FFE5E5E5" Offset="0.5"/>
+                                </LinearGradientBrush>
+                            </Button.Foreground>
+                            <Button.Background>
+                                <ImageBrush ImageSource="/img/cfg/ButtonKClear.png"/>
+                            </Button.Background>
+                        </Button>
+                        <Button x:Name="button_add" Style="{StaticResource GlowImageButton}" Grid.Column="1" Content="添加" HorizontalAlignment="Left" Height="26" Margin="417,0,0,0" VerticalAlignment="Center" Width="50" Click="button_add_Click" BorderBrush="{x:Null}">
+                            <Button.Foreground>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEAEB77" Offset="0"/>
+                                    <GradientStop Color="#FFE5E5E5" Offset="0.5"/>
+                                </LinearGradientBrush>
+                            </Button.Foreground>
+                            <Button.Background>
+                                <ImageBrush ImageSource="/img/cfg/ButtonKAdd.png"/>
+                            </Button.Background>
+                        </Button>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <!-- 视图页（保持你现有内容不变） -->
+            <TabItem Header="视图" BorderBrush="{x:Null}" Background="{x:Null}">
+                <TabItem.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFEAEB77" Offset="0"/>
+                        <GradientStop Color="#FFE5E5E5" Offset="0.5"/>
+                    </LinearGradientBrush>
+                </TabItem.Foreground>
+                <Grid>
+                    <Grid.Resources>
+                        <local:IntToBoolConverter x:Key="IntToBoolConverter"/>
+                    </Grid.Resources>
+                    <Grid.Background>
+                        <ImageBrush ImageSource="/img/cfg/BackgroundTab2.png"/>
+                    </Grid.Background>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- 大标题：隐藏设置 -->
+                    <TextBlock FontSize="20"
+                               Margin="20,14,20,14"
+                               FontStyle="Italic"
+                               FontWeight="Bold">
+                        <TextBlock.Foreground>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FF8A8C9A" Offset="0.938"/>
+                                <GradientStop Color="White" Offset="0"/>
+                                <GradientStop Color="#FF4D4DD2" Offset="1"/>
+                                <GradientStop Color="White" Offset="0.641"/>
+                                <GradientStop Color="#FF8A8C9A" Offset="0.875"/>
+                            </LinearGradientBrush>
+                        </TextBlock.Foreground><Run Text="隐藏设置"/></TextBlock>
+                    <!-- 小标题：悬浮球模式 + 单选项 -->
+                    <Grid Margin="54,53,20,50" Grid.RowSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="选择悬浮球模式："
+                                   VerticalAlignment="Center"
+                                   FontSize="14"
+                                   Margin="0,8,16,8"
+                                   FontWeight="Bold">
+                            <TextBlock.Foreground>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEAEB77" Offset="0"/>
+                                    <GradientStop Color="#FFE5E5E5" Offset="0.5"/>
+                                </LinearGradientBrush>
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center" Margin="17,0,-17,0">
+                            <RadioButton Style="{StaticResource RadioCircleStyle}"
+                                         Content="贴着左侧"
+                                         GroupName="Button3ModeGroup"
+                                         Margin="0,0,24,0" IsChecked="{Binding Button3Mode, ConverterParameter=2, Converter={StaticResource IntToBoolConverter}, Mode=TwoWay, Source={x:Static local:PositionSettings.Current}}">
+                                <RadioButton.Foreground>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFEAEB77" Offset="0"/>
+                                        <GradientStop Color="#FFE5E5E5" Offset="0.5"/>
+                                    </LinearGradientBrush>
+                                </RadioButton.Foreground>
+                            </RadioButton>
+                            <RadioButton Style="{StaticResource RadioCircleStyle}"
+                                         Content="自由悬浮"
+                                         GroupName="Button3ModeGroup"
+                                         Margin="0,0,24,0" IsChecked="{Binding Button3Mode, ConverterParameter=0, Converter={StaticResource IntToBoolConverter}, Mode=TwoWay, Source={x:Static local:PositionSettings.Current}}">
+                                <RadioButton.Foreground>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFEAEB77" Offset="0"/>
+                                        <GradientStop Color="#FFE5E5E5" Offset="0.5"/>
+                                    </LinearGradientBrush>
+                                </RadioButton.Foreground>
+                            </RadioButton>
+                            <RadioButton Style="{StaticResource RadioCircleStyle}"
+                                         Content="贴着右侧"
+                                         GroupName="Button3ModeGroup" Cursor="Hand"
+                                         IsChecked="{Binding Button3Mode, ConverterParameter=1, Converter={StaticResource IntToBoolConverter}, Mode=TwoWay, Source={x:Static local:PositionSettings.Current}}">
+                                <RadioButton.Foreground>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFEAEB77" Offset="0"/>
+                                        <GradientStop Color="#FFE5E5E5" Offset="0.5"/>
+                                    </LinearGradientBrush>
+                                </RadioButton.Foreground>
+                            </RadioButton>
+                        </StackPanel>
+                    </Grid>
+                    <!-- 小标题：一次切换桌面操作后 + 单选项 -->
+                    <Grid Margin="54,78,20,0" VerticalAlignment="Top" Grid.RowSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="一次切换桌面操作后："
+                                   VerticalAlignment="Center"
+                                   FontSize="14"
+                                   Margin="0,8,16,8"
+                                   FontWeight="Bold">
+                            <TextBlock.Foreground>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEAEB77" Offset="0"/>
+                                    <GradientStop Color="#FFE5E5E5" Offset="0.5"/>
+                                </LinearGradientBrush>
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <StackPanel
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="145,0,11,0">
+                            <RadioButton Style="{StaticResource RadioCircleStyle}"
+                                         Content="无"
+                                         GroupName="Buttons12PostActionGroup"
+                                         Margin="0,0,24,0" Width="84" IsChecked="{Binding Buttons12PostAction, ConverterParameter=0, Converter={StaticResource IntToBoolConverter}, Mode=TwoWay, Source={x:Static local:PositionSettings.Current}}">
+                                <RadioButton.Foreground>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFEAEB77" Offset="0"/>
+                                        <GradientStop Color="#FFE5E5E5" Offset="0.5"/>
+                                    </LinearGradientBrush>
+                                </RadioButton.Foreground>
+                            </RadioButton>
+                            <RadioButton Style="{StaticResource RadioCircleStyle}"
+                                         Content="隐藏"
+                                         GroupName="Buttons12PostActionGroup"
+                                         Margin="0,0,24,0" Width="84" IsChecked="{Binding Buttons12PostAction, ConverterParameter=1, Converter={StaticResource IntToBoolConverter}, Mode=TwoWay, Source={x:Static local:PositionSettings.Current}}">
+                                <RadioButton.Foreground>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFEAEB77" Offset="0"/>
+                                        <GradientStop Color="#FFE5E5E5" Offset="0.5"/>
+                                    </LinearGradientBrush>
+                                </RadioButton.Foreground>
+                            </RadioButton>
+                            <RadioButton Style="{StaticResource RadioCircleStyle}"
+                                         Content="退出"
+                                         GroupName="Buttons12PostActionGroup" Width="84" IsChecked="{Binding Buttons12PostAction, ConverterParameter=2, Converter={StaticResource IntToBoolConverter}, Mode=TwoWay, Source={x:Static local:PositionSettings.Current}}">
+                                <RadioButton.Foreground>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFEAEB77" Offset="0"/>
+                                        <GradientStop Color="#FFE5E5E5" Offset="0.5"/>
+                                    </LinearGradientBrush>
+                                </RadioButton.Foreground>
+                            </RadioButton>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- 第二个大标题：图形按钮设置 -->
+                    <TextBlock Grid.Row="3"
+                               FontSize="20"
+                               Margin="20,8,20,14"
+                               FontStyle="Italic"
+                               FontWeight="Bold"
+                               Text="图形按钮设置">
+                        <TextBlock.Foreground>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FF8A8C9A" Offset="0.938"/>
+                                <GradientStop Color="White" Offset="0"/>
+                                <GradientStop Color="#FF4D4DD2" Offset="1"/>
+                                <GradientStop Color="White" Offset="0.641"/>
+                                <GradientStop Color="#FF8A8C9A" Offset="0.875"/>
+                            </LinearGradientBrush>
+                        </TextBlock.Foreground>
+                    </TextBlock>
+                    <!-- 小标题：按钮缩放 + Slider -->
+                    <Grid Grid.Row="4" Margin="54,0,20,20" VerticalAlignment="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="按钮缩放："
+                                   VerticalAlignment="Center"
+                                   FontSize="14"
+                                   Margin="0,8,16,8"
+                                   FontWeight="Bold">
+                            <TextBlock.Foreground>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEAEB77" Offset="0"/>
+                                    <GradientStop Color="#FFE5E5E5" Offset="0.5"/>
+                                </LinearGradientBrush>
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <Slider Grid.Column="1"
+                                Style="{StaticResource RoundedTrackSlider}"
+                                Minimum="0.2"
+                                Maximum="3"
+                                TickFrequency="0.02"
+                                IsSnapToTickEnabled="True"
+                                SmallChange="0.1"
+                                LargeChange="0.2"
+                                Width="260"
+                                VerticalAlignment="Top"
+                                Value="{Binding Buttons1To3Scale, Mode=TwoWay, Source={x:Static local:PositionSettings.Current}, UpdateSourceTrigger=PropertyChanged}" Margin="57,10,317,0"/>
+                    </Grid>
+                    <!-- 小标题：不透明度 + Slider -->
+                    <Grid Grid.Row="4" Margin="54,27,20,0" VerticalAlignment="Top" Grid.RowSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="不透明度："
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            Margin="0,8,16,8"
+                            FontWeight="Bold">
+                            <TextBlock.Foreground>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEAEB77" Offset="0"/>
+                                    <GradientStop Color="#FFE5E5E5" Offset="0.5"/>
+                                </LinearGradientBrush>
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <Slider Grid.Column="1"
+                                Style="{StaticResource RoundedTrackSlider}"
+                                Minimum="0.1"
+                                Maximum="1"
+                                TickFrequency="0.01"
+                                IsSnapToTickEnabled="True"
+                                SmallChange="0.1"
+                                LargeChange="0.2"
+                                Width="260"
+                                VerticalAlignment="Top"
+                                Value="{Binding Buttons1To3Opacity, Mode=TwoWay, Source={x:Static local:PositionSettings.Current}, UpdateSourceTrigger=PropertyChanged}" Margin="57,10,317,0"/>
+                    </Grid>
+
+                    <!-- 第三个大标题：文字按钮设置 -->
+                    <TextBlock Grid.Row="5"
+                               FontSize="20"
+                               Margin="20,47,20,155"
+                               FontStyle="Italic"
+                               FontWeight="Bold"
+                               Text="文字按钮设置">
+                        <TextBlock.Foreground>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FF8A8C9A" Offset="0.938"/>
+                                <GradientStop Color="White" Offset="0"/>
+                                <GradientStop Color="#FF4D4DD2" Offset="1"/>
+                                <GradientStop Color="White" Offset="0.641"/>
+                                <GradientStop Color="#FF8A8C9A" Offset="0.875"/>
+                            </LinearGradientBrush>
+                        </TextBlock.Foreground>
+                    </TextBlock>
+                    <Grid Grid.Row="5" Margin="54,87,20,0" VerticalAlignment="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="按钮缩放："
+                                   VerticalAlignment="Center"
+                                   FontSize="14"
+                                   Margin="0,8,16,8"
+                                   FontWeight="Bold">
+                            <TextBlock.Foreground>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEAEB77" Offset="0"/>
+                                    <GradientStop Color="#FFE5E5E5" Offset="0.5"/>
+                                </LinearGradientBrush>
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <Slider Grid.Column="1"
+                                Style="{StaticResource RoundedTrackSlider}"
+                                Minimum="0.2"
+                                Maximum="3"
+                                TickFrequency="0.02"
+                                IsSnapToTickEnabled="True"
+                                SmallChange="0.1"
+                                LargeChange="0.2"
+                                Width="260"
+                                VerticalAlignment="Top"
+                                Value="{Binding Buttons4To9Scale, Mode=TwoWay, Source={x:Static local:PositionSettings.Current}, UpdateSourceTrigger=PropertyChanged}" Margin="57,10,317,0"/>
+                    </Grid>
+                    <Grid Grid.Row="5" Margin="54,114,20,0" VerticalAlignment="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="不透明度："
+                                   VerticalAlignment="Center"
+                                   FontSize="14"
+                                   Margin="0,8,16,8"
+                                   FontWeight="Bold">
+                            <TextBlock.Foreground>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFEAEB77" Offset="0"/>
+                                    <GradientStop Color="#FFE5E5E5" Offset="0.5"/>
+                                </LinearGradientBrush>
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <Slider Grid.Column="1"
+                                Style="{StaticResource RoundedTrackSlider}"
+                                Minimum="0.1"
+                                Maximum="1"
+                                TickFrequency="0.01"
+                                IsSnapToTickEnabled="True"
+                                SmallChange="0.1"
+                                LargeChange="0.2"
+                                Width="260"
+                                VerticalAlignment="Top"
+                                Value="{Binding Buttons4To9Opacity, Mode=TwoWay, Source={x:Static local:PositionSettings.Current}, UpdateSourceTrigger=PropertyChanged}" Margin="57,10,317,0"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <!-- 底部按钮：确定、取消、复原 -->
+        <Button x:Name="button_confirm" Style="{StaticResource GlowImageButtonMain}"
+                Content="确定" HorizontalAlignment="Left" Height="32" Margin="607,515,0,0"
+                VerticalAlignment="Top" Width="74" FontSize="16"
+                Click="button_confirm_Click" BorderBrush="{x:Null}">
+            <Button.Foreground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFEAEB77" Offset="0"/>
+                    <GradientStop Color="#FFE5E5E5" Offset="0.5"/>
+                </LinearGradientBrush>
+            </Button.Foreground>
+            <Button.Background>
+                <ImageBrush ImageSource="/img/cfg/ButtonAOk.png"/>
+            </Button.Background>
+        </Button>
+        <Button x:Name="button_cancel" Style="{StaticResource GlowImageButtonMain}"
+                Content="取消" HorizontalAlignment="Left" Height="32" Margin="698,515,0,0"
+                VerticalAlignment="Top" Width="74" FontSize="16"
+                Click="button_cancel_Click" BorderBrush="{x:Null}">
+            <Button.Foreground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFEAEB77" Offset="0"/>
+                    <GradientStop Color="#FFE5E5E5" Offset="0.5"/>
+                </LinearGradientBrush>
+            </Button.Foreground>
+            <Button.Background>
+                <ImageBrush ImageSource="/img/cfg/ButtonAOther.png"/>
+            </Button.Background>
+        </Button>
+        <Button x:Name="button_restore" Style="{StaticResource GlowImageButtonMain}"
+                Content="复原" HorizontalAlignment="Left" Height="32" Margin="30,515,0,0"
+                VerticalAlignment="Top" Width="74" FontSize="16"
+                Click="button_restore_Click" BorderBrush="{x:Null}">
+            <Button.Foreground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFEAEB77" Offset="0"/>
+                    <GradientStop Color="#FFE5E5E5" Offset="0.5"/>
+                </LinearGradientBrush>
+            </Button.Foreground>
+            <Button.Background>
+                <ImageBrush ImageSource="/img/cfg/ButtonAOther.png"/>
+            </Button.Background>
+        </Button>
+    </Grid>
+</Window>

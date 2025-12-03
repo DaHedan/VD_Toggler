@@ -1,0 +1,504 @@
+﻿<Window x:Class="VD_Toggler_3.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VD_Toggler_3"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Topmost="True"
+        AllowsTransparency="True"
+        Background="Transparent"
+        WindowStartupLocation="Manual"
+        Loaded="Window_Loaded">
+    <Window.Resources>
+        <local:CenterLeftConverter x:Key="CenterLeftConverter"/>
+        <local:CenterTopConverter x:Key="CenterTopConverter"/>
+        <local:ButtonSizeScaledConverter x:Key="ButtonSizeScaledConverter"/>
+        <local:LeftByWidthMultiConverter x:Key="LeftByWidthMultiConverter"/>
+        <local:TopByHeightMultiConverter x:Key="TopByHeightMultiConverter"/>
+        <local:Button3LeftByModeConverter x:Key="Button3LeftByModeConverter"/>
+        <local:Button3TopByModeConverter x:Key="Button3TopByModeConverter"/>
+        <local:Button3WidthConverter x:Key="Button3WidthConverter"/>
+        <Storyboard x:Key="ClickAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" 
+                             From="1" To="0.9" Duration="0:0:0.075" />
+            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" 
+                             From="1" To="0.9" Duration="0:0:0.075" />
+            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" 
+                             From="0.9" To="1" BeginTime="0:0:0.1" Duration="0:0:0.075" />
+            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" 
+                             From="0.9" To="1" BeginTime="0:0:0.1" Duration="0:0:0.075" />
+        </Storyboard>
+        <Storyboard x:Key="FadeOutAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" 
+                         From="1" To="0" Duration="0:0:0.15"/>
+        </Storyboard>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Rectangle Fill="{TemplateBinding Background}" />
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <EventTrigger RoutedEvent="Button.Click">
+                                <BeginStoryboard Storyboard="{StaticResource ClickAnimation}"/>
+                            </EventTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Canvas>
+        <!-- Button1 -->
+        <Button x:Name="Button1"
+                Opacity="{Binding Path=Buttons1To3Opacity, Source={x:Static local:PositionSettings.Current}}"
+                Content=""
+                IsHitTestVisible="True"
+                Click="HandleButton1Click"
+                MouseRightButtonDown="ShowButtons_MouseRightButtonDown">
+            <Button.Width>
+                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="12">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Buttons1To3Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Button.Width>
+            <Button.Height>
+                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="12">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Buttons1To3Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Button.Height>
+            <Button.Background>
+                <ImageBrush Stretch="UniformToFill">
+                    <ImageBrush.ImageSource>
+                        <BitmapImage UriSource="/img/vdt/L1.png"/>
+                    </ImageBrush.ImageSource>
+                </ImageBrush>
+            </Button.Background>
+            <Canvas.Left>
+                <MultiBinding Converter="{StaticResource CenterLeftConverter}">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Button1LeftRatio" Source="{x:Static local:PositionSettings.Current}"/>
+                    <Binding Path="Buttons1To3Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Canvas.Left>
+            <Canvas.Top>
+                <MultiBinding Converter="{StaticResource CenterTopConverter}">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Buttons12TopRatio" Source="{x:Static local:PositionSettings.Current}"/>
+                    <Binding Path="Buttons1To3Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Canvas.Top>
+        </Button>
+
+        <!-- Button2 -->
+        <Button x:Name="Button2"
+                Opacity="{Binding Path=Buttons1To3Opacity, Source={x:Static local:PositionSettings.Current}}"
+                Content=""
+                IsHitTestVisible="True"
+                Click="HandleButton2Click"
+                MouseRightButtonDown="ShowButtons_MouseRightButtonDown">
+            <Button.Width>
+                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="12">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Buttons1To3Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Button.Width>
+            <Button.Height>
+                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="12">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Buttons1To3Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Button.Height>
+            <Button.Style>
+                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <ImageBrush Stretch="UniformToFill">
+                                <ImageBrush.ImageSource>
+                                    <BitmapImage UriSource="/img/vdt/R1.png"/>
+                                </ImageBrush.ImageSource>
+                            </ImageBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsOnLastDesktop, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <ImageBrush Stretch="UniformToFill">
+                                        <ImageBrush.ImageSource>
+                                            <BitmapImage UriSource="/img/vdt/RA.png"/>
+                                        </ImageBrush.ImageSource>
+                                    </ImageBrush>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            <Canvas.Left>
+                <MultiBinding Converter="{StaticResource CenterLeftConverter}">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Button2LeftRatio" Source="{x:Static local:PositionSettings.Current}"/>
+                    <Binding Path="Buttons1To3Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Canvas.Left>
+            <Canvas.Top>
+                <MultiBinding Converter="{StaticResource CenterTopConverter}">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Buttons12TopRatio" Source="{x:Static local:PositionSettings.Current}"/>
+                    <Binding Path="Buttons1To3Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Canvas.Top>
+        </Button>
+
+        <!-- Button3 -->
+        <Button x:Name="Button3"
+                Opacity="{Binding Path=Buttons1To3Opacity, Source={x:Static local:PositionSettings.Current}}"
+                Content=""
+                IsHitTestVisible="True"
+                Visibility="Collapsed"
+                Click="HandleButton3Click">
+            <Button.Height>
+                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="12">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Buttons1To3Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Button.Height>
+            <Button.Width>
+                <MultiBinding Converter="{StaticResource Button3WidthConverter}">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Button3Mode" Source="{x:Static local:PositionSettings.Current}"/>
+                    <Binding Path="Buttons1To3Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Button.Width>
+            <Button.Style>
+                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <ImageBrush Stretch="UniformToFill">
+                                <ImageBrush.ImageSource>
+                                    <BitmapImage UriSource="/img/vdt/B1.png"/>
+                                </ImageBrush.ImageSource>
+                            </ImageBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <DataTrigger Value="2">
+                            <DataTrigger.Binding>
+                                <Binding Path="Button3Mode" Source="{x:Static local:PositionSettings.Current}"/>
+                            </DataTrigger.Binding>
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <ImageBrush Stretch="UniformToFill">
+                                        <ImageBrush.ImageSource>
+                                            <BitmapImage UriSource="/img/vdt/B2.png"/>
+                                        </ImageBrush.ImageSource>
+                                    </ImageBrush>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Value="0">
+                            <DataTrigger.Binding>
+                                <Binding Path="Button3Mode" Source="{x:Static local:PositionSettings.Current}"/>
+                            </DataTrigger.Binding>
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <ImageBrush Stretch="UniformToFill">
+                                        <ImageBrush.ImageSource>
+                                            <BitmapImage UriSource="/img/vdt/B3.png"/>
+                                        </ImageBrush.ImageSource>
+                                    </ImageBrush>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            <!-- Left：mode=1 贴右；mode=2 贴左；mode=0 自由 -->
+            <Canvas.Left>
+                <MultiBinding Converter="{StaticResource Button3LeftByModeConverter}">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Button3Mode" Source="{x:Static local:PositionSettings.Current}"/>
+                    <Binding Path="Button3LeftRatio_Free" Source="{x:Static local:PositionSettings.Current}"/>
+                    <Binding Path="Buttons1To3Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Canvas.Left>
+            <!-- Top：mode=0 用 Button3TopRatio_Free；否则用 Button3TopRatio_Edge -->
+            <Canvas.Top>
+                <MultiBinding Converter="{StaticResource Button3TopByModeConverter}">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Button3Mode" Source="{x:Static local:PositionSettings.Current}"/>
+                    <Binding Path="Button3TopRatio_LeftEdge" Source="{x:Static local:PositionSettings.Current}"/>
+                    <Binding Path="Button3TopRatio_RightEdge" Source="{x:Static local:PositionSettings.Current}"/>
+                    <Binding Path="Button3TopRatio_Free" Source="{x:Static local:PositionSettings.Current}"/>
+                    <Binding Path="Buttons1To3Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Canvas.Top>
+        </Button>
+
+        <!-- Button4 -->
+        <Button x:Name="Button4"
+                Opacity="{Binding Path=Buttons4To9Opacity, Source={x:Static local:PositionSettings.Current}}"
+                Content=""
+                IsHitTestVisible="True"
+                Visibility="Collapsed"
+                Click="HandleButton4Click">
+            <Button.Width>
+                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="9">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Button.Width>
+            <Button.Height>
+                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="20">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Button.Height>
+            <Button.Background>
+                <ImageBrush Stretch="UniformToFill">
+                    <ImageBrush.ImageSource>
+                        <BitmapImage UriSource="/img/vdt/C.png"/>
+                    </ImageBrush.ImageSource>
+                </ImageBrush>
+            </Button.Background>
+            <Canvas.Left>
+                <MultiBinding Converter="{StaticResource LeftByWidthMultiConverter}">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Path="Buttons4to9LeftRatio" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Canvas.Left>
+            <Canvas.Top>
+                <MultiBinding Converter="{StaticResource TopByHeightMultiConverter}">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Button4TopRatio" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Canvas.Top>
+        </Button>
+
+        <!-- Button5 -->
+        <Button x:Name="Button5"
+                Opacity="{Binding Path=Buttons4To9Opacity, Source={x:Static local:PositionSettings.Current}}"
+                Content=""
+                IsHitTestVisible="True"
+                Visibility="Collapsed"
+                Click="HandleButton5Click">
+            <Button.Width>
+                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="9">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Button.Width>
+            <Button.Height>
+                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="20">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Button.Height>
+            <Button.Background>
+                <ImageBrush Stretch="UniformToFill">
+                    <ImageBrush.ImageSource>
+                        <BitmapImage UriSource="/img/vdt/H.png"/>
+                    </ImageBrush.ImageSource>
+                </ImageBrush>
+            </Button.Background>
+            <Canvas.Left>
+                <MultiBinding Converter="{StaticResource LeftByWidthMultiConverter}">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Path="Buttons4to9LeftRatio" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Canvas.Left>
+            <Canvas.Top>
+                <MultiBinding Converter="{StaticResource TopByHeightMultiConverter}">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Button5TopRatio" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Canvas.Top>
+        </Button>
+
+        <!-- Button6 -->
+        <Button x:Name="Button6"
+                Opacity="{Binding Path=Buttons4To9Opacity, Source={x:Static local:PositionSettings.Current}}"
+                Content=""
+                IsHitTestVisible="True"
+                Visibility="Collapsed"
+                Click="HandleButton6Click">
+            <Button.Width>
+                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="9">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Button.Width>
+            <Button.Height>
+                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="20">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Button.Height>
+            <Button.Background>
+                <ImageBrush Stretch="UniformToFill">
+                    <ImageBrush.ImageSource>
+                        <BitmapImage UriSource="/img/vdt/X.png"/>
+                    </ImageBrush.ImageSource>
+                </ImageBrush>
+            </Button.Background>
+            <Canvas.Left>
+                <MultiBinding Converter="{StaticResource LeftByWidthMultiConverter}">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Path="Buttons4to9LeftRatio" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Canvas.Left>
+            <Canvas.Top>
+                <MultiBinding Converter="{StaticResource TopByHeightMultiConverter}">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Button6TopRatio" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Canvas.Top>
+        </Button>
+
+        <!-- Button7 -->
+        <Button x:Name="Button7"
+                Opacity="{Binding Path=Buttons4To9Opacity, Source={x:Static local:PositionSettings.Current}}"
+                Content=""
+                IsHitTestVisible="True"
+                Visibility="Collapsed"
+                Click="HandleButton7Click">
+            <Button.Width>
+                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="9">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Button.Width>
+            <Button.Height>
+                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="20">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Button.Height>
+            <Button.Background>
+                <ImageBrush Stretch="UniformToFill">
+                    <ImageBrush.ImageSource>
+                        <BitmapImage UriSource="/img/vdt/A.png"/>
+                    </ImageBrush.ImageSource>
+                </ImageBrush>
+            </Button.Background>
+            <Canvas.Left>
+                <MultiBinding Converter="{StaticResource LeftByWidthMultiConverter}">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Path="Buttons4to9LeftRatio" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Canvas.Left>
+            <Canvas.Top>
+                <MultiBinding Converter="{StaticResource TopByHeightMultiConverter}">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Button7TopRatio" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Canvas.Top>
+        </Button>
+
+        <!-- Button8 -->
+        <Button x:Name="Button8"
+                Opacity="{Binding Path=Buttons4To9Opacity, Source={x:Static local:PositionSettings.Current}}"
+                Content=""
+                IsHitTestVisible="True"
+                Visibility="Collapsed"
+                Click="HandleButton8Click">
+            <Button.Width>
+                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="9">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Button.Width>
+            <Button.Height>
+                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="20">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Button.Height>
+            <Button.Background>
+                <ImageBrush Stretch="UniformToFill">
+                    <ImageBrush.ImageSource>
+                        <BitmapImage UriSource="/img/vdt/W.png"/>
+                    </ImageBrush.ImageSource>
+                </ImageBrush>
+            </Button.Background>
+            <Canvas.Left>
+                <MultiBinding Converter="{StaticResource LeftByWidthMultiConverter}">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Path="Buttons4to9LeftRatio" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Canvas.Left>
+            <Canvas.Top>
+                <MultiBinding Converter="{StaticResource TopByHeightMultiConverter}">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Button8TopRatio" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Canvas.Top>
+        </Button>
+
+        <!-- Button9 -->
+        <Button x:Name="Button9"
+                Opacity="{Binding Path=Buttons4To9Opacity, Source={x:Static local:PositionSettings.Current}}"
+                Content=""
+                IsHitTestVisible="True"
+                Visibility="Collapsed"
+                Click="HandleButton9Click">
+            <Button.Width>
+                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="9">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Button.Width>
+            <Button.Height>
+                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="20">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Button.Height>
+            <Button.Background>
+                <ImageBrush Stretch="UniformToFill">
+                    <ImageBrush.ImageSource>
+                        <BitmapImage UriSource="/img/vdt/S.png"/>
+                    </ImageBrush.ImageSource>
+                </ImageBrush>
+            </Button.Background>
+            <Canvas.Left>
+                <MultiBinding Converter="{StaticResource LeftByWidthMultiConverter}">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Path="Buttons4to9LeftRatio" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Canvas.Left>
+            <Canvas.Top>
+                <MultiBinding Converter="{StaticResource TopByHeightMultiConverter}">
+                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="Button9TopRatio" Source="{x:Static local:PositionSettings.Current}"/>
+                </MultiBinding>
+            </Canvas.Top>
+        </Button>
+    </Canvas>
+</Window>
