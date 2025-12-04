@@ -10,21 +10,10 @@ _为触屏制作的虚拟桌面UI工具_ - 无需键盘即可轻松使用 Window
 > 本软件安装包使用 Inno Setup Compiler 制作（旧版本使用 Nuitka 或 PyInstaller 打包）。  
 > 本软件依赖 .NET 8.0 运行，您可以通过微软官方渠道下载安装该组件，或者下载自包含该组件的软件包。
 
-* 如果你的需求是下载这个软件去使用，而不是需要源代码，请点击**下面的链接**或者去 **Github Releases** 下载对应的文件，不要下载上面的 Code
-### Windows 64位系统：  
-* 在系统上自行安装 .NET 8.0（下载更清洁的软件包）：
-  * 压缩包（解压后运行 VD_Toggler.exe 直接使用）：[VD_Toggler_3.0_alpha_x64.zip](https://github.com/DaHedan/VD_Toggler/releases/download/v3.0.0-alpha/VD_Toggler_3.0_alpha_x64.zip)
-  * 安装包（运行安装包安装后使用）：[VD_Toggler_3.0_alpha_x64_Setup.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v3.0.0-alpha/VD_Toggler_3.0_alpha_x64_Setup.exe)
-* 不在系统上自行安装 .NET 8.0（下载自包含版本的软件包）：
-  * 压缩包（解压后运行 VD_Toggler.exe 直接使用）：[VD_Toggler_3.0_alpha_x64_selfcontained.zip](https://github.com/DaHedan/VD_Toggler/releases/download/v3.0.0-alpha/VD_Toggler_3.0_alpha_x64_selfcontained.zip)
-  * 安装包（运行安装包安装后使用）：[VD_Toggler_3.0_alpha_x64_Setup_selfcontained.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v3.0.0-alpha/VD_Toggler_3.0_alpha_x64_selfcontained_Setup.exe)
-### Windows 32位系统：  
-* 在系统上自行安装 .NET 8.0（下载更清洁的软件包）：
-  * 压缩包（解压后运行 VD_Toggler.exe 直接使用）：[VD_Toggler_3.0_alpha_x86.zip](https://github.com/DaHedan/VD_Toggler/releases/download/v3.0.0-alpha/VD_Toggler_3.0_alpha_x86.zip)
-  * 安装包（运行安装包安装后使用）：[VD_Toggler_3.0_alpha_x86_Setup.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v3.0.0-alpha/VD_Toggler_3.0_alpha_x86_Setup.exe)
-* 不在系统上自行安装 .NET 8.0（下载自包含版本的软件包）：
-  * 压缩包（解压后运行 VD_Toggler.exe 直接使用）：[VD_Toggler_3.0_alpha_x86_selfcontained.zip](https://github.com/DaHedan/VD_Toggler/releases/download/v3.0.0-alpha/VD_Toggler_3.0_alpha_x86_selfcontained.zip)
-  * 安装包（运行安装包安装后使用）：[VD_Toggler_3.0_alpha_x86_Setup_selfcontained.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v3.0.0-alpha/VD_Toggler_3.0_alpha_x86_selfcontained_Setup.exe)
+如果你的需求是下载这个软件去使用，而不是需要源代码，请到 [**Releases VD_Toggler v3.0**](https://github.com/DaHedan/VD_Toggler/releases/tag/v3.0.0-alpha) 下载对应的文件，不要下载上面的 Code
+### 普通用户推荐下载
+Windows 64位系统：[VD_Toggler_3.0_alpha_x64_Setup_selfcontained.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v3.0.0-alpha/VD_Toggler_3.0_alpha_x64_selfcontained_Setup.exe)  
+Windows 32位系统：[VD_Toggler_3.0_alpha_x86_Setup_selfcontained.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v3.0.0-alpha/VD_Toggler_3.0_alpha_x86_selfcontained_Setup.exe)
 
 ### 其他版本：  
   * [VD_Toggler v2.2.0](https://github.com/DaHedan/VD_Toggler/releases/tag/v2.2.0)
@@ -46,20 +35,9 @@ _为触屏制作的虚拟桌面UI工具_ - 无需键盘即可轻松使用 Window
 ### 配置工具
 1. 通过拖动桌面上的按钮图标至合适位置，可修改按键布局。
 2. 中央的窗口中可修改更多内容：  
-  * __功能__ 界面：  
-    * “__自动静音__”，用于选择是否在切换桌面时静音。  
-    * “__自动熄屏__”，用于选择切换桌面后是否自动熄屏休眠。  
-    * “__附加快捷键__”，用于设置切换桌面时自动触发的快捷键。_(最多添加4个快捷键)_  
-  * __视图__ 界面：  
-    * “__隐藏设置__”：  
-      * “__选择悬浮球模式__”，用于选择隐藏时的悬浮球在 _屏幕左侧_ 或 _屏幕右侧_ 或 _自由悬浮_ 。  
-      * “__一次切换桌面操作后__”，用于选择是否让 <img width="16" height="16" alt="L1" src="https://github.com/user-attachments/assets/007ab724-7ac6-469e-8e90-d4c8b9909285" /> 和 <img width="16" height="16" alt="R1" src="https://github.com/user-attachments/assets/987dd230-14f8-4d58-b3bf-6c48e97c1621" /> 按钮在切换桌面后立即消失 _隐藏_ 或 _退出_ 。  
-    * “__图形按钮设置__”：  
-      * “__按钮大小__”，用于设置三个圆形按钮的大小。  
-      * “__按钮不透明度__”，用于调整三个圆形按钮的不透明度。  
-    * “__文字按钮设置__”：  
-      * “__按钮大小__”，用于设置六个文字按钮的大小。  
-      * “__按钮不透明度__”，用于调整六个文字按钮的不透明度。  
+  <img width="350" height="264" alt="VDT_Cfg1" src="https://github.com/user-attachments/assets/e08eadfe-4fb2-4af8-87d1-8183f8b36985" /> 
+  <img width="350" height="264" alt="VDT_Cfg2" src="https://github.com/user-attachments/assets/ab0d99dc-bcec-499c-be00-18082e65895e" />
+
 4. 点击中央窗口底部的“__确定__”按钮，可保留更改。  
 5. 点击中央窗口底部的“__取消__”按钮，可放弃更改。  
 6. 点击中央窗口底部的“__复原__”按钮，可恢复默认的配置数据。
