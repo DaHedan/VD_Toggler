@@ -12,8 +12,8 @@ _为触屏制作的虚拟桌面UI工具_ - 无需键盘即可轻松使用 Window
 
 如果你的需求是下载这个软件去使用，而不是需要源代码，请到 [**Releases VD_Toggler v3.0**](https://github.com/DaHedan/VD_Toggler/releases/tag/v3.0.0-alpha) 下载对应的文件，不要下载上面的 Code
 ### 普通用户推荐下载
-Windows 64位系统：[VD_Toggler_3.0_alpha_x64_Setup_selfcontained.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v3.0.0-alpha/VD_Toggler_3.0_alpha_x64_selfcontained_Setup.exe)  
-Windows 32位系统：[VD_Toggler_3.0_alpha_x86_Setup_selfcontained.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v3.0.0-alpha/VD_Toggler_3.0_alpha_x86_selfcontained_Setup.exe)
+Windows 64位系统：[VD_Toggler_3.0_beta_x64_Setup_selfcontained.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v3.0.0-beta/VD_Toggler_3.0_beta_x64_selfcontained_Setup.exe)  
+Windows 32位系统：[VD_Toggler_3.0_beta_x86_Setup_selfcontained.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v3.0.0-beta/VD_Toggler_3.0_beta_x86_selfcontained_Setup.exe)
 
 ### 其他版本：  
   * [VD_Toggler v2.2.0](https://github.com/DaHedan/VD_Toggler/releases/tag/v2.2.0)
