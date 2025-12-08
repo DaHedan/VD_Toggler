@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -623,7 +623,7 @@ namespace VD_Toggler_3
             // 计算是否处于最后一个桌面
             var all = GetAllVirtualDesktopIdsFromRegistry();
             int currentIndex = GetCurrentVirtualDesktopIndexOrDefault(1);
-            bool isLast = all.Count > 0 && currentIndex >= all.Count;
+            bool isLast = all.Count <= 1 || (all.Count > 0 && currentIndex >= all.Count);
 
             await RunPreSwitchKeysWithMinimizeAsync();
             if (isLast)
