@@ -1,16 +1,24 @@
-﻿using System.ComponentModel;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Navigation;
 
 namespace VD_Toggler_3
 {
-    public partial class ConfigWindow : Window
+    public partial class ConfigWindow : Window, INotifyPropertyChanged
     {
         // 配置快照与确认标记
         private readonly PositionsConfig _snapshot;
@@ -19,9 +27,55 @@ namespace VD_Toggler_3
         // 当前已显示的快捷键数量
         private int _keyComboCount = 0;
 
+        public ObservableCollection<MonitorOption> MonitorOptions { get; } = new();
+
+        private string? _primaryMonitorDeviceName;
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private void OnPropertyChanged([CallerMemberName] string? name = null)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+        public string? SelectedMonitorDeviceName
+        {
+            get
+            {
+                var cfg = PositionSettings.Current;
+                return string.IsNullOrWhiteSpace(cfg.TargetMonitorDeviceName)
+                    ? _primaryMonitorDeviceName
+                    : cfg.TargetMonitorDeviceName;
+            }
+            set
+            {
+                var cfg = PositionSettings.Current;
+
+                string? newValue;
+                if(string.IsNullOrWhiteSpace(value) ||
+            string.Equals(value, _primaryMonitorDeviceName, StringComparison.OrdinalIgnoreCase))
+        {
+                    newValue = null;
+                }
+        else
+                {
+                    newValue = value;
+                }
+
+                if (string.Equals(cfg.TargetMonitorDeviceName, newValue, StringComparison.OrdinalIgnoreCase))
+                    return;
+
+                cfg.TargetMonitorDeviceName = newValue;
+
+                if (Owner is MainWindow mw)
+                {
+                    mw.ApplyMonitorPlacementFromSettings();
+                }
+            }
+        }
+
         public ConfigWindow()
         {
             InitializeComponent();
+
+            DataContext = this;
 
             // 创建当前配置快照
             _snapshot = PositionSettings.Snapshot();
@@ -30,7 +84,71 @@ namespace VD_Toggler_3
             // 初始化
             InitKeyCombosFromConfig();
             UpdateKeyCombosVisibility();
+
+            LoadMonitorOptions();
+
+            Microsoft.Win32.SystemEvents.DisplaySettingsChanged += OnDisplaySettingsChanged;
+            SourceInitialized += ConfigWindow_SourceInitialized;
         }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            // 移除事件处理
+            Microsoft.Win32.SystemEvents.DisplaySettingsChanged -= OnDisplaySettingsChanged;
+            SourceInitialized -= ConfigWindow_SourceInitialized;
+            Closing -= ConfigWindow_Closing;
+
+            ClearAllBindingsAndEvents(this);
+
+            // 清理资源
+            DataContext = null;
+            MonitorOptions.Clear();
+            Owner = null;
+
+            base.OnClosed(e);
+        }
+
+        // 全面清理绑定和事件处理器
+        private static void ClearAllBindingsAndEvents(DependencyObject root)
+        {
+            if (root == null) return;
+
+            // 清理当前元素的绑定
+            BindingOperations.ClearAllBindings(root);
+
+            // 如果是控件，清理事件处理器
+            if (root is FrameworkElement fe)
+            {
+                // 清理命令绑定
+                fe.CommandBindings.Clear();
+                fe.InputBindings.Clear();
+
+                // 清理行为（如果有）
+                if (fe is ItemsControl itemsControl)
+                {
+                    // 清理 ItemsSource 绑定（这是一个常见的内存泄漏源）
+                    itemsControl.ItemsSource = null;
+                    itemsControl.Items.Clear();
+                }
+
+                if (fe is ComboBox comboBox)
+                {
+                    comboBox.ItemsSource = null;
+                    comboBox.Items.Clear();
+                }
+            }
+
+            // 递归清理子元素
+            int childCount = VisualTreeHelper.GetChildrenCount(root);
+            for (int i = 0; i < childCount; i++)
+            {
+                var child = VisualTreeHelper.GetChild(root, i);
+                ClearAllBindingsAndEvents(child);
+            }
+        }
+
+        private void ConfigWindow_SourceInitialized(object? sender, EventArgs e)
+            => ApplyTitleBarTheme();
 
         // 位置改动脏标记
         private bool _positionsDirty;
@@ -234,6 +352,81 @@ namespace VD_Toggler_3
                 SystemCommands.RestoreWindow(this);
             else
                 SystemCommands.MaximizeWindow(this);
+        }
+
+        private const int DwmUseImmersiveDarkMode = 20;
+        private const int DwmUseImmersiveDarkModeBefore20H1 = 19;
+
+        [DllImport("dwmapi.dll")]
+        private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize);
+
+        private void ApplyTitleBarTheme()
+        {
+            var hwnd = new WindowInteropHelper(this).Handle;
+            if (hwnd == IntPtr.Zero)
+                return;
+
+            int useDark = 1;
+            DwmSetWindowAttribute(hwnd, DwmUseImmersiveDarkMode, ref useDark, sizeof(int));
+            DwmSetWindowAttribute(hwnd, DwmUseImmersiveDarkModeBefore20H1, ref useDark, sizeof(int));
+        }
+
+        public sealed class MonitorOption
+        {
+            public string? DeviceName { get; init; }
+            public string DisplayName { get; init; } = string.Empty;
+        }
+
+        // 加载显示器选项
+        private void LoadMonitorOptions()
+        {
+            MonitorOptions.Clear();
+
+            int index = 1;
+            var monitors = DisplayMonitorHelper.GetMonitors();
+            foreach (var monitor in monitors)
+            {
+                if (monitor.IsPrimary)
+                {
+                    _primaryMonitorDeviceName = monitor.DeviceName;
+                }
+
+                string label = monitor.IsPrimary ? "主显示器" : $"显示器 {index}";
+                string display = $"{label} - {monitor.DeviceName} ({monitor.Width}x{monitor.Height})";
+                MonitorOptions.Add(new MonitorOption
+                {
+                    DeviceName = monitor.DeviceName,
+                    DisplayName = display
+                });
+                index++;
+            }
+
+            var cfg = PositionSettings.Current;
+            bool exists = monitors.Any(m =>
+                string.Equals(m.DeviceName, cfg.TargetMonitorDeviceName, StringComparison.OrdinalIgnoreCase));
+
+            if (!exists)
+            {
+                cfg.TargetMonitorDeviceName = null;
+            }
+
+            OnPropertyChanged(nameof(SelectedMonitorDeviceName));
+        }
+
+        // 监听显示设置变化
+        private void OnDisplaySettingsChanged(object? sender, EventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                LoadMonitorOptions();
+            });
+        }
+
+        // 超链接点击事件
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });
+            e.Handled = true;
         }
     }
 }
