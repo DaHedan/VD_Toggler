@@ -74,6 +74,35 @@ namespace VD_Toggler_3
             }
         }
 
+        private double _screenWidth = SystemParameters.PrimaryScreenWidth;
+        private double _screenHeight = SystemParameters.PrimaryScreenHeight;
+
+        public double ScreenWidth
+        {
+            get => _screenWidth;
+            private set
+            {
+                if (Math.Abs(_screenWidth - value) > 0.01)
+                {
+                    _screenWidth = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public double ScreenHeight
+        {
+            get => _screenHeight;
+            private set
+            {
+                if (Math.Abs(_screenHeight - value) > 0.01)
+                {
+                    _screenHeight = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         // 编辑模式:按钮1-9全部可见、带边框、可拖动，原功能取消
         private bool _isLayoutEditMode;
         private UIElement? _draggingElement;
@@ -692,27 +721,25 @@ namespace VD_Toggler_3
             await HideButtons4To9Core(); 
         }
 
-        
 
-        // 计算 Button3 尺寸相关基数（与 XAML 转换器保持一致）
-        private static double GetSize12Scaled() =>
-            (SystemParameters.PrimaryScreenHeight / 12.0) * Math.Max(0.01, PositionSettings.Current.Buttons1To3Scale);
-        private static double GetSize24Scaled() =>
-            (SystemParameters.PrimaryScreenHeight / 24.0) * Math.Max(0.01, PositionSettings.Current.Buttons1To3Scale);
 
-        // 保存 Button3 的位置到配置（按模式落到对应的 Ratio 字段）
+        // 计算 Button3 尺寸相关基数
+        private double GetSize12Scaled() =>
+            (ScreenHeight / 12.0) * Math.Max(0.01, PositionSettings.Current.Buttons1To3Scale);
+
+        private double GetSize24Scaled() =>
+            (ScreenHeight / 24.0) * Math.Max(0.01, PositionSettings.Current.Buttons1To3Scale);
+
         private void SaveButton3RatiosByMode(double left, double top)
         {
-            double screenW = SystemParameters.PrimaryScreenWidth;
-            double screenH = SystemParameters.PrimaryScreenHeight;
+            double screenW = ScreenWidth;
+            double screenH = ScreenHeight;
 
-            // Button3 高度与自由模式宽度 = H/12*scale
             double size12 = GetSize12Scaled();
 
             var cfg = PositionSettings.Current;
             int mode = cfg.Button3Mode;
 
-            // 将像素位置转换为中心点比例
             double centerX = (left + size12 / 2.0) / screenW;
             double centerY = (top + size12 / 2.0) / screenH;
             static double Clamp01(double v) => v < 0 ? 0 : (v > 1 ? 1 : v);
@@ -722,31 +749,21 @@ namespace VD_Toggler_3
 
             if (mode == 0)
             {
-                // 自由模式：保存左右、上下
                 cfg.Button3LeftRatio_Free = centerX;
                 cfg.Button3TopRatio_Free = centerY;
             }
             else if (mode == 1)
             {
-                // 贴右：仅保存纵向比例
                 cfg.Button3TopRatio_RightEdge = centerY;
             }
             else if (mode == 2)
             {
-                // 贴左：仅保存纵向比例
                 cfg.Button3TopRatio_LeftEdge = centerY;
             }
 
             PositionSettings.Save();
-            // 由于配置对象不发通知，强制刷新绑定重新计算
             ForceReapplyPositionBindings();
         }
-
-       
-
-        
-
-        
 
         // 按钮3点击事件
         private async void HandleButton3Click(object sender, RoutedEventArgs e)
@@ -898,14 +915,49 @@ namespace VD_Toggler_3
             await Task.CompletedTask;
         }
 
+        // 根据配置将窗口放置在选定的显示器上
+        private void ApplySelectedMonitorPlacement()
+        {
+            var monitor = GetTargetMonitor();
+
+            var source = PresentationSource.FromVisual(this);
+            if (source?.CompositionTarget == null)
+            {
+                Left = monitor.Left;
+                Top = monitor.Top;
+                Width = monitor.Width;
+                Height = monitor.Height;
+
+                ScreenWidth = monitor.Width;
+                ScreenHeight = monitor.Height;
+                return;
+            }
+
+            var transform = source.CompositionTarget.TransformFromDevice;
+            var topLeft = transform.Transform(new Point(monitor.Left, monitor.Top));
+            var size = transform.Transform(new Vector(monitor.Width, monitor.Height));
+
+            Left = topLeft.X;
+            Top = topLeft.Y;
+            Width = size.X;
+            Height = size.Y;
+
+            ScreenWidth = size.X;
+            ScreenHeight = size.Y;
+        }
+
+        // 获取目标显示器信息
+        private static DisplayMonitorInfo GetTargetMonitor()
+        {
+            var target = PositionSettings.Current.TargetMonitorDeviceName;
+            return DisplayMonitorHelper.FindByDeviceName(target) ?? DisplayMonitorHelper.GetPrimary();
+        }
+
         // 确保窗口覆盖整个屏幕
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            // 置顶并覆盖整个主屏幕
-            this.Left = 0;
-            this.Top = 0;
-            this.Width = SystemParameters.PrimaryScreenWidth;
-            this.Height = SystemParameters.PrimaryScreenHeight;
+            ApplySelectedMonitorPlacement();
+
             this.Topmost = true;
             this.WindowStyle = WindowStyle.None;
             this.ResizeMode = ResizeMode.NoResize;
@@ -936,6 +988,8 @@ namespace VD_Toggler_3
             UpdateButton1VisibilityByDesktop();
 
             StartVirtualDesktopRegistryWatchers();
+
+            Microsoft.Win32.SystemEvents.DisplaySettingsChanged += OnDisplaySettingsChanged;
         }
 
         // 注册表监听器，用于检测虚拟桌面切换
@@ -978,6 +1032,14 @@ namespace VD_Toggler_3
             _vdDebounceCts?.Cancel();
             _vdGlobalWatcher?.Dispose();
             _vdSessionWatcher?.Dispose();
+            Microsoft.Win32.SystemEvents.DisplaySettingsChanged -= OnDisplaySettingsChanged;
+
+            if (_hwndSource != null)
+            {
+                _hwndSource.RemoveHook(WndProc);
+                _hwndSource.Dispose();
+                _hwndSource = null;
+            }
         }
 
         // 窗口消息处理：实现透明背景穿透、控件可交互
@@ -1149,7 +1211,7 @@ namespace VD_Toggler_3
                 }
 
                 Button1.Visibility = desktopIndex <= 1 ? Visibility.Collapsed : Visibility.Visible;
-                IsOnLastDesktop = all.Count > 0 && desktopIndex >= all.Count;
+                IsOnLastDesktop = all.Count <= 1 || (all.Count > 0 && desktopIndex >= all.Count);
             }
             catch
             {
@@ -1157,6 +1219,17 @@ namespace VD_Toggler_3
                 Button1.Visibility = Visibility.Visible;
                 IsOnLastDesktop = false;
             }
+        }
+
+        // 显示设置变更时重新应用监视器相关配置
+        private void OnDisplaySettingsChanged(object? sender, EventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                ApplySelectedMonitorPlacement();
+                ForceReapplyPositionBindings();
+                UpdateButton1VisibilityByDesktop();
+            });
         }
 
         // 用于在编辑模式时为按钮绘制可见边框
@@ -1270,8 +1343,8 @@ namespace VD_Toggler_3
         // 保存当前拖拽后的可视位置为比例到配置文件
         private void ApplyEditedPositionsToSettingsAndSave()
         {
-            double screenW = SystemParameters.PrimaryScreenWidth;
-            double screenH = SystemParameters.PrimaryScreenHeight;
+            double screenW = ScreenWidth;
+            double screenH = ScreenHeight;
 
             double base12 = screenH / 12.0;
             double size12 = base12 * Math.Max(0.01, PositionSettings.Current.Buttons1To3Scale);
@@ -1282,7 +1355,7 @@ namespace VD_Toggler_3
             static double Clamp01(double v) => v < 0 ? 0 : (v > 1 ? 1 : v);
 
             double L(FrameworkElement el) { var v = Canvas.GetLeft(el); return double.IsNaN(v) ? 0.0 : v; }
-            double T(FrameworkElement el) { var v = Canvas.GetTop(el);  return double.IsNaN(v) ? 0.0 : v; }
+            double T(FrameworkElement el) { var v = Canvas.GetTop(el); return double.IsNaN(v) ? 0.0 : v; }
 
             var cfg = PositionSettings.Current;
 
@@ -1294,7 +1367,7 @@ namespace VD_Toggler_3
             if (mode == 0)
             {
                 cfg.Button3LeftRatio_Free = Clamp01((L(Button3) + size12 / 2.0) / screenW);
-                cfg.Button3TopRatio_Free  = Clamp01((T(Button3) + size12 / 2.0) / screenH);
+                cfg.Button3TopRatio_Free = Clamp01((T(Button3) + size12 / 2.0) / screenH);
             }
             else if (mode == 1)
             {
@@ -1333,6 +1406,17 @@ namespace VD_Toggler_3
             Button3.Visibility = Visibility.Collapsed;
 
             // 按桌面状态更新按钮1可见性
+            UpdateButton1VisibilityByDesktop();
+
+            // 重新应用显示器位置
+            ApplySelectedMonitorPlacement();
+        }
+
+        // 供 ConfigWindow 调用：应用显示器位置
+        public void ApplyMonitorPlacementFromSettings()
+        {
+            ApplySelectedMonitorPlacement();
+            ForceReapplyPositionBindings();
             UpdateButton1VisibilityByDesktop();
         }
 
