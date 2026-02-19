@@ -1,4 +1,4 @@
-﻿<Window x:Class="VD_Toggler_3.MainWindow"
+<Window x:Class="VD_Toggler_3.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -76,13 +76,13 @@
                 MouseRightButtonDown="ShowButtons_MouseRightButtonDown">
             <Button.Width>
                 <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="12">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons1To3Scale" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Button.Width>
             <Button.Height>
                 <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="12">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons1To3Scale" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Button.Height>
@@ -95,16 +95,16 @@
             </Button.Background>
             <Canvas.Left>
                 <MultiBinding Converter="{StaticResource CenterLeftConverter}">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenWidth" RelativeSource="{RelativeSource AncestorType=Window}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Button1LeftRatio" Source="{x:Static local:PositionSettings.Current}"/>
                     <Binding Path="Buttons1To3Scale" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Canvas.Left>
             <Canvas.Top>
                 <MultiBinding Converter="{StaticResource CenterTopConverter}">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenWidth" RelativeSource="{RelativeSource AncestorType=Window}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons12TopRatio" Source="{x:Static local:PositionSettings.Current}"/>
                     <Binding Path="Buttons1To3Scale" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
@@ -120,13 +120,13 @@
                 MouseRightButtonDown="ShowButtons_MouseRightButtonDown">
             <Button.Width>
                 <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="12">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons1To3Scale" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Button.Width>
             <Button.Height>
                 <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="12">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons1To3Scale" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Button.Height>
@@ -158,16 +158,16 @@
             </Button.Style>
             <Canvas.Left>
                 <MultiBinding Converter="{StaticResource CenterLeftConverter}">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenWidth" RelativeSource="{RelativeSource AncestorType=Window}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Button2LeftRatio" Source="{x:Static local:PositionSettings.Current}"/>
                     <Binding Path="Buttons1To3Scale" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Canvas.Left>
             <Canvas.Top>
                 <MultiBinding Converter="{StaticResource CenterTopConverter}">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenWidth" RelativeSource="{RelativeSource AncestorType=Window}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons12TopRatio" Source="{x:Static local:PositionSettings.Current}"/>
                     <Binding Path="Buttons1To3Scale" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
@@ -183,13 +183,13 @@
                 Click="HandleButton3Click">
             <Button.Height>
                 <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="12">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons1To3Scale" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Button.Height>
             <Button.Width>
                 <MultiBinding Converter="{StaticResource Button3WidthConverter}">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Button3Mode" Source="{x:Static local:PositionSettings.Current}"/>
                     <Binding Path="Buttons1To3Scale" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
@@ -240,8 +240,8 @@
             <!-- Left：mode=1 贴右；mode=2 贴左；mode=0 自由 -->
             <Canvas.Left>
                 <MultiBinding Converter="{StaticResource Button3LeftByModeConverter}">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenWidth" RelativeSource="{RelativeSource AncestorType=Window}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Button3Mode" Source="{x:Static local:PositionSettings.Current}"/>
                     <Binding Path="Button3LeftRatio_Free" Source="{x:Static local:PositionSettings.Current}"/>
                     <Binding Path="Buttons1To3Scale" Source="{x:Static local:PositionSettings.Current}"/>
@@ -250,8 +250,8 @@
             <!-- Top：mode=0 用 Button3TopRatio_Free；否则用 Button3TopRatio_Edge -->
             <Canvas.Top>
                 <MultiBinding Converter="{StaticResource Button3TopByModeConverter}">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenWidth" RelativeSource="{RelativeSource AncestorType=Window}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Button3Mode" Source="{x:Static local:PositionSettings.Current}"/>
                     <Binding Path="Button3TopRatio_LeftEdge" Source="{x:Static local:PositionSettings.Current}"/>
                     <Binding Path="Button3TopRatio_RightEdge" Source="{x:Static local:PositionSettings.Current}"/>
@@ -269,14 +269,14 @@
                 Visibility="Collapsed"
                 Click="HandleButton4Click">
             <Button.Width>
-                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="9">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="5.0625">
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Button.Width>
             <Button.Height>
                 <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="20">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Button.Height>
@@ -289,13 +289,13 @@
             </Button.Background>
             <Canvas.Left>
                 <MultiBinding Converter="{StaticResource LeftByWidthMultiConverter}">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Path="ScreenWidth" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons4to9LeftRatio" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Canvas.Left>
             <Canvas.Top>
                 <MultiBinding Converter="{StaticResource TopByHeightMultiConverter}">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Button4TopRatio" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Canvas.Top>
@@ -309,14 +309,14 @@
                 Visibility="Collapsed"
                 Click="HandleButton5Click">
             <Button.Width>
-                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="9">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="5.0625">
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Button.Width>
             <Button.Height>
                 <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="20">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Button.Height>
@@ -329,13 +329,13 @@
             </Button.Background>
             <Canvas.Left>
                 <MultiBinding Converter="{StaticResource LeftByWidthMultiConverter}">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Path="ScreenWidth" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons4to9LeftRatio" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Canvas.Left>
             <Canvas.Top>
                 <MultiBinding Converter="{StaticResource TopByHeightMultiConverter}">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Button5TopRatio" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Canvas.Top>
@@ -349,14 +349,14 @@
                 Visibility="Collapsed"
                 Click="HandleButton6Click">
             <Button.Width>
-                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="9">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="5.0625">
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Button.Width>
             <Button.Height>
                 <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="20">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Button.Height>
@@ -369,13 +369,13 @@
             </Button.Background>
             <Canvas.Left>
                 <MultiBinding Converter="{StaticResource LeftByWidthMultiConverter}">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Path="ScreenWidth" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons4to9LeftRatio" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Canvas.Left>
             <Canvas.Top>
                 <MultiBinding Converter="{StaticResource TopByHeightMultiConverter}">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Button6TopRatio" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Canvas.Top>
@@ -389,14 +389,14 @@
                 Visibility="Collapsed"
                 Click="HandleButton7Click">
             <Button.Width>
-                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="9">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="5.0625">
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Button.Width>
             <Button.Height>
                 <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="20">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Button.Height>
@@ -409,13 +409,13 @@
             </Button.Background>
             <Canvas.Left>
                 <MultiBinding Converter="{StaticResource LeftByWidthMultiConverter}">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Path="ScreenWidth" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons4to9LeftRatio" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Canvas.Left>
             <Canvas.Top>
                 <MultiBinding Converter="{StaticResource TopByHeightMultiConverter}">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Button7TopRatio" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Canvas.Top>
@@ -429,14 +429,14 @@
                 Visibility="Collapsed"
                 Click="HandleButton8Click">
             <Button.Width>
-                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="9">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="5.0625">
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Button.Width>
             <Button.Height>
                 <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="20">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Button.Height>
@@ -449,13 +449,13 @@
             </Button.Background>
             <Canvas.Left>
                 <MultiBinding Converter="{StaticResource LeftByWidthMultiConverter}">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Path="ScreenWidth" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons4to9LeftRatio" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Canvas.Left>
             <Canvas.Top>
                 <MultiBinding Converter="{StaticResource TopByHeightMultiConverter}">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Button8TopRatio" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Canvas.Top>
@@ -469,14 +469,14 @@
                 Visibility="Collapsed"
                 Click="HandleButton9Click">
             <Button.Width>
-                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="9">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="5.0625">
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Button.Width>
             <Button.Height>
                 <MultiBinding Converter="{StaticResource ButtonSizeScaledConverter}" ConverterParameter="20">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons4To9Scale" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Button.Height>
@@ -489,13 +489,13 @@
             </Button.Background>
             <Canvas.Left>
                 <MultiBinding Converter="{StaticResource LeftByWidthMultiConverter}">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenWidth}"/>
+                    <Binding Path="ScreenWidth" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Buttons4to9LeftRatio" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Canvas.Left>
             <Canvas.Top>
                 <MultiBinding Converter="{StaticResource TopByHeightMultiConverter}">
-                    <Binding Source="{x:Static SystemParameters.PrimaryScreenHeight}"/>
+                    <Binding Path="ScreenHeight" RelativeSource="{RelativeSource AncestorType=Window}"/>
                     <Binding Path="Button9TopRatio" Source="{x:Static local:PositionSettings.Current}"/>
                 </MultiBinding>
             </Canvas.Top>
