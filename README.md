@@ -35,8 +35,8 @@ Windows 32位系统：[VD_Toggler_3.1_alpha_x86_Setup_selfcontained.exe](https:/
 ### 配置工具
 1. 通过拖动桌面上的按钮图标至合适位置，可修改按键布局。
 2. 中央的窗口中可修改更多内容：  
-  <img width="350" height="264" alt="VDT_Cfg1" src="https://github.com/user-attachments/assets/e08eadfe-4fb2-4af8-87d1-8183f8b36985" /> 
-  <img width="350" height="264" alt="VDT_Cfg2" src="https://github.com/user-attachments/assets/ab0d99dc-bcec-499c-be00-18082e65895e" />
+  <img width="350" height="264" alt="VDT_Cfg1" src="https://github.com/user-attachments/assets/e7c15be6-5b84-4e8f-b639-c86ae6c5e330" /> 
+  <img width="350" height="264" alt="VDT_Cfg2" src="https://github.com/user-attachments/assets/96a5ea8d-cce5-4934-86b5-545256a56fac" />
 
 4. 点击中央窗口底部的“__确定__”按钮，可保留更改。  
 5. 点击中央窗口底部的“__取消__”按钮，可放弃更改。  
