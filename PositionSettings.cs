@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text.Json;
 using System.Windows.Input;
@@ -54,6 +54,8 @@ namespace VD_Toggler_3
         public Key? PreSwitchKey3 { get; set; }
         public Key? PreSwitchKey4 { get; set; }
 
+        // 目标显示器
+        public string? TargetMonitorDeviceName { get; set; } = @"\\.\DISPLAY1";
     }
 
     // 配置管理
@@ -132,7 +134,8 @@ namespace VD_Toggler_3
             PreSwitchKey1 = Current.PreSwitchKey1,
             PreSwitchKey2 = Current.PreSwitchKey2,
             PreSwitchKey3 = Current.PreSwitchKey3,
-            PreSwitchKey4 = Current.PreSwitchKey4
+            PreSwitchKey4 = Current.PreSwitchKey4,
+            TargetMonitorDeviceName = Current.TargetMonitorDeviceName
         };
 
         // 将快照值恢复到 Current（内存回滚）
@@ -171,6 +174,7 @@ namespace VD_Toggler_3
             dst.PreSwitchKey2 = src.PreSwitchKey2;
             dst.PreSwitchKey3 = src.PreSwitchKey3;
             dst.PreSwitchKey4 = src.PreSwitchKey4;
+            dst.TargetMonitorDeviceName = src.TargetMonitorDeviceName;
         }
     }
 }
