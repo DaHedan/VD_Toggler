@@ -1,0 +1,184 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+    <ApplicationIcon>img\app\VDT.ico</ApplicationIcon>
+    <SignAssembly>False</SignAssembly>
+	<AssemblyName>VD_Toggler</AssemblyName>
+    <Version>3.1.0</Version>
+    <Authors>DaHedan</Authors>
+	<Company />
+	<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+	<Product>VD_Toggler</Product>
+	<AssemblyTitle>Windows虚拟桌面切换UI工具</AssemblyTitle>
+    <Description>Windows虚拟桌面切换UI工具</Description>
+    <Copyright>© 2025 DaHedan。基于MIT许可证发布。</Copyright>
+    <Title>Windows虚拟桌面切换UI工具</Title>
+	<FileDescription>Windows虚拟桌面切换UI工具</FileDescription>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="VD_Toggler_3\**" />
+    <EmbeddedResource Remove="VD_Toggler_3\**" />
+    <None Remove="VD_Toggler_3\**" />
+    <Page Remove="VD_Toggler_3\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="img\app\cfg.ico" />
+    <None Remove="img\cfg\Background.png" />
+    <None Remove="img\cfg\BackgroundTab1.png" />
+    <None Remove="img\cfg\BackgroundTab2.png" />
+    <None Remove="img\cfg\BackgroundTab3.png" />
+    <None Remove="img\cfg\BackgroundTabTop1.png" />
+    <None Remove="img\cfg\BackgroundTabTop2.png" />
+    <None Remove="img\cfg\BorderBackOn.png" />
+    <None Remove="img\cfg\BorderPoint.png" />
+    <None Remove="img\cfg\ButtonAOk.png" />
+    <None Remove="img\cfg\ButtonAOther.png" />
+    <None Remove="img\cfg\ButtonKAdd.png" />
+    <None Remove="img\cfg\ButtonKClear.png" />
+    <None Remove="img\cfg\ComboBox.png" />
+    <None Remove="img\cfg\ConfirmBackground.png" />
+    <None Remove="img\cfg\Question.png" />
+    <None Remove="img\cfg\RadioButtonOff.png" />
+    <None Remove="img\cfg\RadioButtonOn.png" />
+    <None Remove="img\cfg\SolidTrack.png" />
+    <None Remove="img\vdt\A.png" />
+    <None Remove="img\vdt\B1.png" />
+    <None Remove="img\vdt\B2.png" />
+    <None Remove="img\vdt\B3.png" />
+    <None Remove="img\vdt\C.png" />
+    <None Remove="img\vdt\H.png" />
+    <None Remove="img\vdt\L1.png" />
+    <None Remove="img\vdt\R1.png" />
+    <None Remove="img\vdt\RA.png" />
+    <None Remove="img\vdt\S.png" />
+    <None Remove="img\vdt\W.png" />
+    <None Remove="img\vdt\X.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\VD_Toggler_Setup\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="img\app\cfg.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\app\VDT.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="img\cfg\Background.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\cfg\BackgroundTab1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\cfg\BackgroundTab2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\cfg\BackgroundTab3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\cfg\BackgroundTabTop1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\cfg\BackgroundTabTop2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\cfg\BorderBackOff.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\cfg\BorderBackOn.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\cfg\BorderPoint.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\cfg\ButtonAOk.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\cfg\ButtonAOther.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\cfg\ButtonKAdd.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\cfg\ButtonKClear.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\cfg\ComboBox.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\cfg\ConfirmBackground.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\cfg\Question.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\cfg\RadioButtonOff.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\cfg\RadioButtonOn.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\cfg\SolidTrack.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\vdt\A.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\vdt\B1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\vdt\B2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\vdt\B3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\vdt\C.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\vdt\H.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\vdt\L1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\vdt\R1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\vdt\RA.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\vdt\S.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\vdt\W.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\vdt\X.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="positions.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
