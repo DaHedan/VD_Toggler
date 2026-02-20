@@ -1,7 +1,7 @@
 # <img width="32" height="32" alt="VDT" src="https://github.com/user-attachments/assets/65090833-0ba9-41f2-b7b8-3d79ce2b9723" /> VD_Toggler_3.1 ![GitHub 版本](https://img.shields.io/github/v/release/DaHedan/VD_Toggler?include_prereleases) ![许可证](https://img.shields.io/github/license/DaHedan/VD_Toggler) ![支持系统](https://img.shields.io/badge/OS-Windows_10/11-blue??logo=windows) ![总下载量](https://img.shields.io/github/downloads/DaHedan/VD_Toggler/total) ![最后提交](https://img.shields.io/github/last-commit/DaHedan/VD_Toggler)
 _为触屏制作的虚拟桌面UI工具_ - 无需键盘即可轻松使用 Windows 虚拟桌面（支持 Windows 10/11）
 
-想要了解关于 VD_Toggler 详细信息请查看 [GitHub Wiki](https://github.com/DaHedan/VD_Toggler/wiki/VD_Toggler-v3.0-wiki)。
+想要了解关于 VD_Toggler 详细信息请查看 [GitHub Wiki](https://github.com/DaHedan/VD_Toggler/wiki/VD_Toggler-v3.1-wiki)。
 
 ## 📜 许可协议
 本项目采用 [MIT 许可证](https://github.com/DaHedan/VD_Toggler/blob/main/LICENSE)
