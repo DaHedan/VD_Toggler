@@ -1,7 +1,7 @@
 # <img width="32" height="32" alt="VDT" src="https://github.com/user-attachments/assets/65090833-0ba9-41f2-b7b8-3d79ce2b9723" /> VD_Toggler_3.1 ![GitHub 版本](https://img.shields.io/github/v/release/DaHedan/VD_Toggler?include_prereleases) ![许可证](https://img.shields.io/github/license/DaHedan/VD_Toggler) ![支持系统](https://img.shields.io/badge/OS-Windows_10/11-blue??logo=windows) ![总下载量](https://img.shields.io/github/downloads/DaHedan/VD_Toggler/total) ![最后提交](https://img.shields.io/github/last-commit/DaHedan/VD_Toggler)
 _为触屏制作的虚拟桌面UI工具_ - 无需键盘即可轻松使用 Windows 虚拟桌面（支持 Windows 10/11）
 
-想要了解关于 VD_Toggler 详细信息请查看 [GitHub Wiki](https://github.com/DaHedan/VD_Toggler/wiki/VD_Toggler-v3.1-wiki)。
+**想要了解关于 VD_Toggler 详细信息请查看 [GitHub Wiki](https://github.com/DaHedan/VD_Toggler/wiki/VD_Toggler-v3.1-wiki)。**
 
 ## 📜 许可协议
 本项目采用 [MIT 许可证](https://github.com/DaHedan/VD_Toggler/blob/main/LICENSE)
@@ -10,10 +10,10 @@ _为触屏制作的虚拟桌面UI工具_ - 无需键盘即可轻松使用 Window
 > 本软件安装包使用 Inno Setup Compiler 制作（旧版本使用 Nuitka 或 PyInstaller 打包）。  
 > 本软件依赖 .NET 8.0 运行，您可以通过微软官方渠道下载安装该组件，或者下载自包含该组件的软件包。
 
-如果你的需求是下载这个软件去使用，而不是需要源代码，请到 [**Releases VD_Toggler v3.1**](https://github.com/DaHedan/VD_Toggler/releases/tag/v3.1.0-alpha) 下载对应的文件，不要下载上面的 Code
+如果你的需求是下载这个软件去使用，而不是需要源代码，请到 [**Releases VD_Toggler v3.1**](https://github.com/DaHedan/VD_Toggler/releases/tag/v3.1.1) 下载对应的文件，不要下载上面的 Code
 ### 普通用户推荐下载
-Windows 64位系统：[VD_Toggler_3.1_alpha_x64_Setup_selfcontained.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v3.1.0-alpha/VD_Toggler_3.1_alpha_x64_selfcontained_Setup.exe)  
-Windows 32位系统：[VD_Toggler_3.1_alpha_x86_Setup_selfcontained.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v3.1.0-alpha/VD_Toggler_3.1_alpha_x86_selfcontained_Setup.exe)
+Windows 64位系统：[VD_Toggler_3.1_x64_selfcontained_Setup.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v3.1.1/VD_Toggler_3.1_x64_selfcontained_Setup.exe)  
+Windows 32位系统：[VD_Toggler_3.1_x86_selfcontained_Setup.exe](https://github.com/DaHedan/VD_Toggler/releases/download/v3.1.1/VD_Toggler_3.1_x86_selfcontained_Setup.exe)
 
 ### 其他版本：  
   * [VD_Toggler v2.2.0](https://github.com/DaHedan/VD_Toggler/releases/tag/v2.2.0)
