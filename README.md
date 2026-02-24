@@ -38,9 +38,12 @@ Windows 32位系统：[VD_Toggler_3.1_x86_selfcontained_Setup.exe](https://githu
   <img width="350" height="264" alt="VDT_Cfg1" src="https://github.com/user-attachments/assets/e7c15be6-5b84-4e8f-b639-c86ae6c5e330" /> 
   <img width="350" height="264" alt="VDT_Cfg2" src="https://github.com/user-attachments/assets/96a5ea8d-cce5-4934-86b5-545256a56fac" />
 
-4. 点击中央窗口底部的“__确定__”按钮，可保留更改。  
-5. 点击中央窗口底部的“__取消__”按钮，可放弃更改。  
-6. 点击中央窗口底部的“__复原__”按钮，可恢复默认的配置数据。
+3. 点击中央窗口底部的“__确定__”按钮，可保留更改。  
+4. 点击中央窗口底部的“__取消__”按钮，可放弃更改。  
+5. 点击中央窗口底部的“__复原__”按钮，可恢复默认的配置数据。
+
+## 📺 视频介绍
+[<img width="400" height="300" alt="VDT3 1-bilibili" src="https://github.com/user-attachments/assets/9e3fa1f8-a8ef-43a6-aa28-54f12323991c" />](https://www.bilibili.com/video/BV13WfqBBEAL/)
 
 ## ⚠️ 用户须知
 1. 此工具仅供非商业使用，用户需自行承担使用过程中的风险（如程序异常、设备问题等），作者不对任何直接或间接损失负责。  
